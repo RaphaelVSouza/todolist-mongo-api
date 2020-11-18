@@ -7,18 +7,16 @@ module.exports = (req, res, next) => {
     if (!authHeader) {
         return res.status(401).json({error: 'Token not provided'})
     }
-    const parts = authHeader.split(' ');
+    const [type, token] = authHeader.split(' ');
 
-    if(!parts.length == 2) {
-        return res.status(401).json({error: 'Token error'})
+    if (type !== 'Bearer') {
+        return res.status(401).json({error: 'Token type must be "Bearer"'})
     }
 
-    const [ scheme, token] = parts;
-
-    if(!/^Bearer$/i.test(scheme)) {
-        return res.status(401).json({error: 'Token syntax error'})
+    if(!token) {
+        return res.status(401).json({error: 'Token must be passed'})
     }
-
+ 
     jwt.verify(token, authConfig.secret, (err, decoded) => {
         if (err) {
             return res.status(401).json({error: 'Token invalid'})
