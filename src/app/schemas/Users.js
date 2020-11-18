@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const authConfig = require('../../config/auth');
 
 const UserSchema = new mongoose.Schema(
     {
@@ -15,15 +17,27 @@ const UserSchema = new mongoose.Schema(
     password: {
         type: String,
         required: true,
-        select:false,
+        select: false,
+    },
+    verifyEmailToken: {
+        type: String,
+        select: false,
+    },
+    verifyEmailExpires: {
+        type: Date,
+        select: false,
+    },
+    verifiedEmail: {
+        type: Boolean,
+        default: false,
     },
     passwordResetToken: {
         type: String,
-      select:false,
+      select: false,
     },
     passwordResetExpires: {
-        type:Date,
-      select:false,
+        type: Date,
+      select: false,
     },
    
    
@@ -34,11 +48,16 @@ const UserSchema = new mongoose.Schema(
 );
 
 UserSchema.pre('save', async function(next) {
-    const hash = await bcrypt.hash(this.password, 10);
-    this.password = hash;
-
+    if(this.password) {
+        const hash = await bcrypt.hash(this.password, 10);
+        this.password = hash;
+    }
     next();
 })
+
+UserSchema.methods.generateToken = function(params = {}) {
+    return jwt.sign( params, authConfig.secret, { expiresIn: '2d'} )
+};
 
 
 
