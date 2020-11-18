@@ -3,9 +3,8 @@ const Task = require('../schemas/Tasks');
 
 class ProjectController {
     async store(req, res) {
-        try {
+        
             const { title, description, tasks } = req.body
-
 
             const project = await Project.create({title, description, user: req.userId})
 
@@ -24,34 +23,27 @@ class ProjectController {
             await project.save();
 
             return res.json(project);
-        } catch(err) {
-            console.log(err);
-            return res.status(400).json({error: 'Error creating new project'})
-        }
         
     }
     async index(req, res) {
-        try {
-            const projects = await Project.find({ user: req.userId}).populate(['user', 'tasks'])
+       
+            const projects = await Project.find({ user: req.userId})
+            .populate(['user', 'tasks']);
+
             return res.json({projects})
-        } catch (err) {
-            console.log(err);
-            return res.status(400).json({error: 'Error loading projects'})
-        }
+      
     }
     async show(req, res) {
-        try {
-            const project = await Project.findById(req.params.projectId).populate(['user', 'tasks'])
+      
+            const project = await Project.findById(req.params.projectId)
+            .populate(['user', 'tasks']);
+
             return res.json(project)
-        } catch (err) {
-            console.log(err);
-            return res.status(400).json({error: 'Error loading project'})
-        }
+      
     }
     async update(req, res) {
-        try {
+      
             const { title, description, tasks } = req.body
-
 
             const project = await Project.findByIdAndUpdate(req.params.projectId, {
                 title,
@@ -79,19 +71,13 @@ class ProjectController {
             await project.save();
 
             return res.json(project);
-        } catch(err) {
-            console.log(err);
-            return res.status(400).json({error: 'Error updating new project'})
-        }
+    
     }
     async delete(req, res) {
-        try {
+      
             await Project.findByIdAndDelete(req.params.projectId, {useFindAndModify:false}).populate('user')
-            return res.json({message: 'Project removed'})
-        } catch (err) {
-            console.log(err);
-            return res.status(400).json({error: 'Error deleting project'})
-        }
+            return res.send({message: 'Project removed'})
+       
     }
     
 }
