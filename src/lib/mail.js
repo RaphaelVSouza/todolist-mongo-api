@@ -1,21 +1,42 @@
 const mailConfig = require('../config/mailConfig.js');
 const hbs = require('nodemailer-express-handlebars');
-const path = require('path')
-const nodemailer = require('nodemailer')
+const { resolve } = require('path');
+const nodemailer = require('nodemailer');
 
-var transport = nodemailer.createTransport({
-    host: mailConfig.host,
-    port: mailConfig.port,
-    auth: mailConfig.auth
-  });
+const { host, port, auth } = mailConfig;
 
-  transport.use('compile', hbs({
-    viewEngine: {
-      defaultLayout: undefined,
-      partialsDir: path.resolve('./src/resources/mail/')
-    },
-    viewPath: path.resolve('./src/resources/mail/'),
-    extName: '.html',
-  }));
-  
-  module.exports = transport;
+class Mail {
+  constructor() {
+    this.transporter = nodemailer.createTransport({
+      host,
+      port,
+      auth: auth.user ? auth : null,
+    });
+
+    this.configureTemplates();
+  }
+
+  configureTemplates() {
+    const viewPath = resolve(__dirname, '..', 'app', 'views', 'email');
+
+    this.transporter.use(
+      'compile',
+      hbs({
+        viewEngine: {
+          layoutsDir: resolve(viewPath, 'layouts'),
+          defaultLayout: 'default',
+          partialsDir: resolve(viewPath, 'partials'),
+          extname: '.hbs',
+        },
+        viewPath,
+        extName: '.hbs',
+      })
+    );
+  }
+
+  sendMail(message) {
+    return this.transporter.sendMail({ ...mailConfig.default, ...message });
+  }
+}
+
+module.exports = new Mail();
