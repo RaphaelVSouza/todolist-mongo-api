@@ -1,12 +1,13 @@
 const User = require('../schemas/Users');
 const crypto = require('crypto');
-const mailer = require('../../lib/mail');
+const Mail = require('../../lib/mail');
+
+const apiUrl = process.env.BACK_URL;
 
 class PasswordController {
     async store(req, res) {
         const { email } = req.body;
 
-    try {
         const user = await User.findOne({ email });
 
         if (!user) {
@@ -22,50 +23,51 @@ class PasswordController {
                 passwordResetToken: token,
                 passwordResetExpires: now,
             }, 
-        }, {useFindAndModify: false})
-        
-        mailer.sendMail({
+        }, { useFindAndModify: false })
+
+        await Mail.sendMail({
             to: email,
             from: 'random@company.com.br',
+            subject: 'Change password',
             template: 'forgot_password',
-            context: { token }
-        })
+            context: { token, apiUrl } 
+          });
+    
         return res.json({message: 'Email successfully sent'})
-    } catch(e) {
-        res.status(400).json({error: 'Error on forgot password'})
-    }
-
 
     }
 
     async update(req, res) {
-        const { email, token, password } = req.body;
+        const { email, password } = req.body;
+        const { resetToken } = req.params;
 
-try { 
-    const user = await User.findOne({ email }).select('+passwordResetToken +passwordResetExpires')
+
+    const user = await User.findOne({ email })
+    .select('+passwordResetToken +passwordResetExpires');
+
     if(!user) {
-        res.status(400).send({ error: 'User not found'})
+       return res.status(400)
+       .send({ error: 'User not found'})
         
     }
-    if(token != user.passwordResetToken) {
-        return res.status(400).send({ error: 'Token invalid' });
+    if(resetToken != user.passwordResetToken) {
+        return res.status(400)
+        .send({ error: 'Token invalid' });
     }
 
     const now = new Date();
 
     if (now > user.passwordResetExpires) {
-        return res.status(400).json({ error: 'Token expired, generate a new one'})
+        return res.status(400)
+        .json({ error: 'Token expired, generate a new one'});
     }
 
     user.password = password;
 
     await user.save();
 
-    res.json({message: 'Password changed successfully'})
-} catch(err) {
-    console.log(err)
-    res.status(400).json({error: 'Cannot reset password'})
-}
+   return res.json({message: 'Password changed successfully'});
+
     }
 }
 
