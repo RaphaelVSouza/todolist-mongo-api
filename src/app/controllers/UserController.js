@@ -1,28 +1,50 @@
+const Yup = require('yup');
 const User = require('../schemas/Users');
-const jwt = require('jsonwebtoken');
-const authConfig = require('../../config/auth.js')
-
-function generateToken(params = {}) {
-    return jwt.sign( params,authConfig.secret, { expiresIn: '2d'} )
-}
+const UserMailController = require('./UserMailController');
 
 class UserController {
    async store (req, res) {
+
+    const validationSchema = Yup.object().shape({
+        name: Yup.string().required(),
+        email: Yup.string().email().required(),
+        password: Yup.string().required(),
+        confirmPassword: Yup.string()
+          .required()
+          .when('password', {
+            is: (password) => (password && password.length > 0 ? true : false),
+            then: Yup.string().oneOf([Yup.ref('password')]),
+          }),
+      });
+  
+      if (!(await validationSchema.isValid(req.body))) {
+        return res.status(400)
+        .send({ message: 'Validation fails' });
+      }
+
     const { email } = req.body;
 
-    try {
-        if (await User.findOne({ email })) {
-            return res.status(400).json({error: 'User already exists'})
-        }
-        const { id, name } = await User.create(req.body);
 
-        return res.json({id, name, email, token: generateToken({id: id})});
-    } catch(e) {
-        console.log(e)
-        return res.status(400).json({error: 'Registration failed'});
-    }
-        
+        if (await User.findOne({ email })) {
+            return res.status(400)
+            .send({error: 'User already exists'})
+        }
+        const user = await User.create(req.body);
+
+        const { id, name } = user;
+
+        UserMailController.sendConfirmationMail(id, email);
+
+        return res.json({id, name, email, token: user.generateToken({id: id})}); 
    }
+
+   async index(req, res) {
+    const users = await User.find();
+
+    return res.json(users);
+}
+
+  
   
 }
 
