@@ -47,14 +47,6 @@ class UserController {
     return res.send({ message: 'Data is successfully alterated'});
   }
    
-   async index(req, res) {
-    const users = await User.find();
-
-    return res.json(users);
-}
-
-  
-  
 }
 
 
