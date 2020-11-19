@@ -17,7 +17,9 @@ module.exports = (req, res, next) => {
         return res.status(401).json({error: 'Token must be passed'})
     }
  
-    jwt.verify(token, authConfig.secret, (err, decoded) => {
+    jwt.verify(token, authConfig.secret, {
+        expiresIn: authConfig.expires
+    }, (err, decoded) => {
         if (err) {
             return res.status(401).json({error: 'Token invalid'})
         }
