@@ -1,9 +1,20 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/todolist', {
-     useNewUrlParser: true,
-      useUnifiedTopology: true
-    }
-    );
+class Database {
+  constructor() {
+    this.mongoConnect();
+  }
+  
+  mongoConnect() {
+    const connectionUrl = `mongodb://localhost/todolist`;
 
-module.exports = mongoose;
+    mongoose.connect(connectionUrl, {
+      useNewUrlParser: true,
+       useUnifiedTopology: true
+     }
+     );
+  }
+
+}
+
+module.exports = new Database();
