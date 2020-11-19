@@ -1,29 +1,10 @@
-const Yup = require('yup');
 const User = require('../schemas/Users');
 const UserMailController = require('./UserMailController');
 
 class UserController {
    async store (req, res) {
 
-    const validationSchema = Yup.object().shape({
-        name: Yup.string().required(),
-        email: Yup.string().email().required(),
-        password: Yup.string().required(),
-        confirmPassword: Yup.string()
-          .required()
-          .when('password', {
-            is: (password) => (password && password.length > 0 ? true : false),
-            then: Yup.string().oneOf([Yup.ref('password')]),
-          }),
-      });
-  
-      if (!(await validationSchema.isValid(req.body))) {
-        return res.status(400)
-        .send({ message: 'Validation fails' });
-      }
-
     const { email } = req.body;
-
 
         if (await User.findOne({ email })) {
             return res.status(400)
@@ -38,6 +19,34 @@ class UserController {
         return res.json({id, name, email, token: user.generateToken({id: id})}); 
    }
 
+   async update(req, res) {
+    const { userId } = req;
+    if (!userId) {
+      return res.status(401).send({ error: 'You need to be logged in' });
+    }
+
+    const { email, oldPassword } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (email && user.email !== email) {
+      const userExists = await User.findOne({
+        where: { email },
+      });
+      if (userExists) {
+        return res.status(400).send({ error: 'User already exists.' });
+      }
+    }
+ 
+    if (oldPassword && !(await user.checkPassword(oldPassword))) {
+      return res.status(401).send({ error: 'Password does not match.' });
+    }
+
+    await user.updateOne(req.body);
+
+    return res.send({ message: 'Data is successfully alterated'});
+  }
+   
    async index(req, res) {
     const users = await User.find();
 

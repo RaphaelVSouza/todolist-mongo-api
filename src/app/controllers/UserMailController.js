@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const Mail = require('../../lib/mail');
 const User = require('../schemas/Users');
-const apiUrl = process.env.BACK_URL;
+const apiUrl = process.env.SERVER_URL;
 
 class UserMailController {
 
