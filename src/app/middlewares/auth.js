@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
+const { promisify } = require('util');
 const authConfig = require('../../config/auth.js');
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
@@ -17,16 +18,20 @@ module.exports = (req, res, next) => {
         return res.status(401).json({error: 'Token must be passed'})
     }
  
-    jwt.verify(token, authConfig.secret, {
-        expiresIn: authConfig.expires
-    }, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({error: 'Token invalid'})
-        }
+    try {
+
+        const decoded = await promisify(jwt.verify)(token, authConfig.secret, {
+            expiresIn: authConfig.expires
+        })
 
         req.userId = decoded.id;
+
         return next();
-    })
+
+    } catch(err) {
+        console.log(err);
+        return res.status(401).json({error: 'Token invalid'})
+    }
 
 
 }
