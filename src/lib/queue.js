@@ -2,8 +2,9 @@ const Bee = require('bee-queue');
 const redisConfig = require('../config/redisConfig');
 
 const VerifyMail = require('../app/jobs/VerifyMail');
+const ChangePassMail = require('../app/jobs/ChangePassMail');
 
-const jobs = [VerifyMail];
+const jobs = [VerifyMail, ChangePassMail];
 
 class Queue {
     
