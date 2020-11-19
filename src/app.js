@@ -10,7 +10,8 @@ const limiter = rateLimit({
   });
 
 require('dotenv').config();
-require('./database')
+
+require('./database/mongo')
 
 class App {
     constructor() {
