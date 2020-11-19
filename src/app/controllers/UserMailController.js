@@ -1,6 +1,8 @@
 const crypto = require('crypto');
-const Mail = require('../../lib/mail');
 const User = require('../schemas/Users');
+const Queue = require('../../lib/queue');
+const VerifyMail = require('../jobs/VerifyMail');
+
 const apiUrl = process.env.SERVER_URL;
 
 class UserMailController {
@@ -18,13 +20,8 @@ class UserMailController {
           }, 
       }, {useFindAndModify: false})
 
-        await Mail.sendMail({
-          to: email,
-          from: 'random@company.com.br',
-          subject: 'Email confirmation',
-          template: 'email_confirmation',
-          context: { verifyToken, apiUrl }
-        })
+     await Queue.add(VerifyMail.key, { email, apiUrl, verifyToken });
+     
 
     }
     
