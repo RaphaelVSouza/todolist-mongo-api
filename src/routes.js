@@ -21,12 +21,11 @@ const validateUserUpdate = require('./app/validators/UserUpdate');
 const validatePasswordStore = require('./app/validators/PasswordStore');
 const validatePasswordUpdate = require('./app/validators/PasswordUpdate');
 const validateSessionStore = require('./app/validators/SessionStore');
-const SessionStore = require('./app/validators/SessionStore');
 
 routes.post('/user-management/register', validateUserStore, UserController.store);
 
 
-routes.post('/user-management/login', bruteforce.prevent, SessionStore,  SessionController.store);
+routes.post('/user-management/login', bruteforce.prevent, validateSessionStore,  SessionController.store);
 
 routes.get('/user-management/verify_email/:verifyToken', UserMailController.verifyEmail);
 
