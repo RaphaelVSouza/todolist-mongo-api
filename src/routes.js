@@ -2,9 +2,12 @@ const { Router } = require('express');
 const ExpressBrute = require('express-brute');
 const RedisStore = require('express-brute-redis');
 
-const redisConfig = require('./config/redisConfig');
+
 const routes = new Router();
 const authMiddleware = require('./app/middlewares/auth');
+const errorMiddleware = require('./app/middlewares/error');
+
+const redisConfig = require('./config/redisConfig');
 
 const store = new RedisStore(redisConfig);
     
@@ -32,14 +35,17 @@ routes.get('/user-management/verify_email/:verifyToken', UserMailController.veri
 routes.post('/user-management/forgot_password', validatePasswordStore, PasswordController.store);
 routes.post('/user-management/reset_password/:resetToken', validatePasswordUpdate, PasswordController.update);
 
-routes.use(authMiddleware);
 
-routes.put('/user-management/edit', validateUserUpdate, UserController.update);
+// Protected routes
 
-routes.post('/projects/new', ProjectController.store);
-routes.get('/projects', ProjectController.index);
-routes.get('/projects/:projectId', ProjectController.show);
-routes.put('/projects/:projectId/edit', ProjectController.update);
-routes.delete('/projects/:projectId/delete', ProjectController.delete);
+routes.put('/user-management/edit', authMiddleware, validateUserUpdate, UserController.update);
+
+routes.post('/projects/new', authMiddleware, ProjectController.store);
+routes.get('/projects',authMiddleware, ProjectController.index);
+routes.get('/projects/:projectId', authMiddleware, ProjectController.show);
+routes.put('/projects/:projectId/edit', authMiddleware, ProjectController.update);
+routes.delete('/projects/:projectId/delete', authMiddleware, ProjectController.delete);
+
+routes.use(errorMiddleware);
 
 module.exports = routes;
