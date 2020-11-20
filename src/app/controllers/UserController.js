@@ -16,7 +16,9 @@ class UserController {
 
         UserMailController.sendConfirmationMail(id, email);
 
-        return res.json({id, name, email, token: user.generateToken({id: id})}); 
+        return res.json({
+          id, name, email,
+          message: `A verify email is sent to ${email}`}); 
    }
 
    async update(req, res) {
