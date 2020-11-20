@@ -34,7 +34,8 @@ to install the dependencies
 
 Rename the '.env.example' in the root directory to '.env' , open the file and fill like this:
 ```environment
-TOKEN_SECRET=
+TOKEN_SECRET=MYULTRASECRET
+TOKEN_EXPIRES=7d
 
 SERVER_URL=localhost:3000
 
