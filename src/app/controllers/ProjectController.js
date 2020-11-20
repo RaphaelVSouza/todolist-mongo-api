@@ -8,7 +8,7 @@ class ProjectController {
                 const validationSchema = Yup.object().shape({
                         title: Yup.string(),
                         description: Yup.string(),
-                        task: Yup.string(),
+                        tasks: Yup.array().of(Yup.string()).min(1),
                 })
 
                 if(!(await validationSchema.isValid(req.body))) {
@@ -21,13 +21,15 @@ class ProjectController {
 
             let { title, description, tasks } = req.body;
 
-            if(!title) {
-                    title = 'No title';
-            }
-
-            if(!description) {
-                    description = 'No description';
-            }
+            if(!title) title = 'No title';
+                    
+            if(!description) description = 'No description';
+                   
+            tasks.forEach(task => {
+                    if(!task.title) {
+                        task.title = 'No title'
+                    }
+            });
 
             const project = await Project.create({title, description, user: req.userId});
 
