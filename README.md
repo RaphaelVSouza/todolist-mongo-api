@@ -58,6 +58,7 @@ npm run dev
 ```
 to start the express server.  
 ### Starting the queue
+Open another terminal on the project root directory and run
 ```bash
 npm run dev:queue
 ```
