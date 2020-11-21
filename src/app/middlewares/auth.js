@@ -5,6 +5,8 @@ const authConfig = require('../../config/auth.js');
 module.exports = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
+    const jwtBodyTest = new RegExp('^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$');
+
     if (!authHeader) {
         return res.status(401).json({error: 'Token not provided'})
     }
@@ -16,6 +18,10 @@ module.exports = async (req, res, next) => {
 
     if(!token) {
         return res.status(401).json({error: 'Token must be passed'})
+    }
+
+    if(!jwtBodyTest.test(token)) {
+        return res.status(401).json({error: 'Token malformed'})
     }
  
     try {
