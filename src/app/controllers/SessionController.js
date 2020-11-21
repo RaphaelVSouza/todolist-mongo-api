@@ -19,7 +19,9 @@ class SessionController {
         if(!await bcrypt.compare(password, user.password)) {
             return res.status(400).send({error: 'Invalid password'});
         }
+
         const { id, name } = user;
+        
         return res.json({id, name, email, token:user.generateToken({id: user.id})});
     }
 

@@ -8,7 +8,9 @@ class ProjectController {
                 const validationSchema = Yup.object().shape({
                         title: Yup.string(),
                         description: Yup.string(),
-                        tasks: Yup.array().of(Yup.string()).min(1),
+                        tasks: Yup.array().of(Yup.object().shape({
+                                title: Yup.string(),
+                              })).min(1),
                 })
 
                 if(!(await validationSchema.isValid(req.body))) {
@@ -25,11 +27,6 @@ class ProjectController {
                     
             if(!description) description = 'No description';
                    
-            tasks.forEach(task => {
-                    if(!task.title) {
-                        task.title = 'No title'
-                    }
-            });
 
             const project = await Project.create({title, description, user: req.userId});
 
@@ -39,11 +36,15 @@ class ProjectController {
 
              if(tasks) {
                 await Promise.all( tasks.map(async task => {
-                        const projectTask = new Task({ ...task, project: project._id});
+                        if(task.hasOwnProperty('title')) {
+                                if(!task.title) task.title = 'No title';
+                                
+                                const projectTask = new Task({ title: task.title, project: project._id});
         
-                        await projectTask.save();
-        
-                        project.tasks.push(projectTask);
+                                await projectTask.save();
+                
+                                project.tasks.push(projectTask);
+                        }
                     }));
                     await project.save();
              }
