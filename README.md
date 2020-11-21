@@ -1,6 +1,6 @@
 # TodoList MongoDB
 
-Foobar is a Python library for dealing with word pluralization.
+Simply TodoList api with Nodejs and a User Authentication system.
 
 ## Installation
 
