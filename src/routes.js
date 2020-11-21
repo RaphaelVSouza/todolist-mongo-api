@@ -17,6 +17,7 @@ const UserController = require('./app/controllers/UserController');
 const SessionController = require('./app/controllers/SessionController');
 const PasswordController = require('./app/controllers/PasswordController');
 const ProjectController = require('./app/controllers/ProjectController');
+const TaskController = require('./app/controllers/TaskController');
 const UserMailController = require('./app/controllers/UserMailController');
 
 const validateUserStore = require('./app/validators/UserStore');
@@ -45,6 +46,8 @@ routes.get('/projects',authMiddleware, ProjectController.index);
 routes.get('/projects/:projectId', authMiddleware, ProjectController.show);
 routes.put('/projects/:projectId/edit', authMiddleware, ProjectController.update);
 routes.delete('/projects/:projectId/delete', authMiddleware, ProjectController.delete);
+
+routes.put('/projects/task', TaskController.update);
 
 routes.use(errorMiddleware);
 
