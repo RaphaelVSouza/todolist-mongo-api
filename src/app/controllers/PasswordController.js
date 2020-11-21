@@ -23,7 +23,7 @@ class PasswordController {
         const resetToken = crypto.randomBytes(20).toString('hex');
 
         const now = new Date();
-        now.setHours(now.getHours() + 1);
+        now.setHours(now.getHours() + 1); // Token expires in 1 hour
 
         await User.findByIdAndUpdate(user.id, {
             '$set': {
