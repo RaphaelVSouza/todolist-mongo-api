@@ -7,22 +7,22 @@ export default async (req, res, next) => {
 
     const jwtBodyTest = new RegExp('^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$');
 
-    if (!authHeader) {
+    if (!authHeader) 
         return res.status(401).json({error: 'Token not provided'})
-    }
+
     const [type, token] = authHeader.split(' ');
 
-    if (type !== 'Bearer') {
+    if (type !== 'Bearer') 
         return res.status(401).json({error: 'Token type must be "Bearer"'})
-    }
 
-    if(!token) {
+
+    if(!token) 
         return res.status(401).json({error: 'Token must be passed'})
-    }
+    
 
-    if(!jwtBodyTest.test(token)) {
+    if(!jwtBodyTest.test(token)) 
         return res.status(401).json({error: 'Token malformed'})
-    }
+    
  
     try {
 
@@ -35,7 +35,6 @@ export default async (req, res, next) => {
         return next();
 
     } catch(err) {
-        console.log(err);
         return res.status(401).json({error: 'Token invalid'})
     }
 

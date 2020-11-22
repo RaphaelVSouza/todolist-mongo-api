@@ -6,10 +6,9 @@ class UserController {
 
     const { email } = req.body;
 
-        if (await User.findOne({ email })) {
-            return res.status(400)
-            .send({error: 'User already exists'})
-        }
+        if (await User.findOne({ email })) 
+          return res.status(403).send({error: 'User already exists'})
+        
         const user = await User.create(req.body);
 
         const { id, name } = user;
@@ -23,9 +22,8 @@ class UserController {
 
    async update(req, res) {
     const { userId } = req;
-    if (!userId) {
+    if (!userId) 
       return res.status(401).send({ error: 'You need to be logged in' });
-    }
 
     const { email, oldPassword } = req.body;
 
@@ -35,14 +33,12 @@ class UserController {
       const userExists = await User.findOne({
         where: { email },
       });
-      if (userExists) {
-        return res.status(400).send({ error: 'User already exists.' });
-      }
+      if (userExists) 
+        return res.status(403).send({ error: 'User already exists.' });
     }
  
-    if (oldPassword && !(await user.checkPassword(oldPassword))) {
+    if (oldPassword && !(await user.checkPassword(oldPassword))) 
       return res.status(401).send({ error: 'Password does not match.' });
-    }
 
     await user.updateOne(req.body);
 

@@ -14,13 +14,13 @@ class ProjectController {
                               })).min(1),
                 })
 
-                if(!(await validationSchema.isValid(req.body))) {
+                if(!(await validationSchema.isValid(req.body))) 
                         return res.status(400).send({ error: 'Validation fails'})
-                };
+
         
-                if(!req.userId) {
+                if(!req.userId) 
                         return res.status(401).send({error: 'You must be logged in to create projects'})
-                }
+
 
             let { title, description, tasks } = req.body;
 
@@ -54,10 +54,9 @@ class ProjectController {
         
     }
     async index(req, res) {
-
-        if(!req.userId) {
-                return res.status(401).send({error: 'You must be logged in to see your projects'});
-        }
+        
+        if(!req.userId) 
+        return res.status(401).send({error: 'You must be logged in to see your projects'});
        
             const projects = await Project.find({ user: req.userId})
             .populate('tasks').populate({path: 'user', select: 'name'});
@@ -68,9 +67,8 @@ class ProjectController {
     async show(req, res) {
             const projectId = req.params.projectId;
 
-            if(!projectId) {
-                    return res.status(400).send({ error: 'ProjectId must be passed' });
-            }
+            if(!projectId)
+                return res.status(400).send({ error: 'ProjectId must be passed' });
       
             const project = await Project.findById()
             .populate('tasks').populate({path: 'user', select: 'name'});
@@ -83,13 +81,10 @@ class ProjectController {
       
             let { title, description, tasks } = req.body;
 
-            if(!title) {
-                title = 'No title';
-        }
+            if(!title) title = 'No title';
 
-        if(!description) {
-                description = 'No description';
-        }
+        if(!description) description = 'No description';
+
 
             const project = await Project.findByIdAndUpdate(req.params.projectId, {
                 title,
@@ -100,6 +95,7 @@ class ProjectController {
              * Deleting tasks to add or modify new ones without duplicate
              */
             project.tasks = [];
+
             await Task.deleteMany({ project: project._id});
 
             /**
@@ -120,8 +116,14 @@ class ProjectController {
     
     }
     async delete(req, res) {
-      
-            await Project.findByIdAndDelete(req.params.projectId, {useFindAndModify:false}).populate('user')
+            const { projectId } = req.params;
+        if(!req.userId) 
+                return res.status(401).send({error: 'You must be logged in to delete your projects'});
+
+        if(!projectId)
+                return res.status(400).send({ error: 'ProjectId must be passed' });
+
+            await Project.findByIdAndDelete(projectId, {useFindAndModify:false}).populate('user')
             return res.send({ message: 'Project removed' });
        
     }

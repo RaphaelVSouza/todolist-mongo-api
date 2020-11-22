@@ -31,28 +31,21 @@ class UserMailController {
         const user = await User.findOne({ verifyEmailToken: token })
         .select('+verifyEmailToken +verifyEmailExpires');
 
-        if(!user) {
-           return res.status(400)
-           .send({ error: 'User not found'})
-       
-        }
+        if(!user) 
+           return res.status(404).send({ error: 'User not found'})
 
-        if(user.verifiedEmail === true) {
-            return res.status(400)
-            .send({ error: 'Email is already verified'})
-        }
+        if(user.verifiedEmail === true) 
+            return res.status(400).send({ error: 'Email is already verified'})
+
     
-        if(token != user.verifyEmailToken) {
-          return res.status(400)
-          .send({ error: 'Token invalid' });
-      }
+        if(token != user.verifyEmailToken) 
+            return res.status(401).send({ error: 'Token invalid' });
     
       const now = new Date();
     
-      if (now > user.verifyEmailExpires) {
-          return res.status(400)
-          .send({ error: 'Token expired, generate a new one'})
-      }
+      if (now > user.verifyEmailExpires) 
+        return res.status(401).send({ error: 'Token expired, generate a new one'})
+
     
       user.verifiedEmail = true;
       user.save();
