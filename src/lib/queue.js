@@ -1,5 +1,5 @@
 import Bee from 'bee-queue';
-import redisConfig from '../config/redisConfig.js';
+import redisConfig from '../config/redis.js';
 
 import VerifyMail from '../app/jobs/VerifyMail.js';
 import ChangePassMail from '../app/jobs/ChangePassMail.js';

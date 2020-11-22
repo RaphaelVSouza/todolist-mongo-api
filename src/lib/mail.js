@@ -4,7 +4,7 @@ import { resolve, dirname } from 'path';
 import nodemailer from 'nodemailer';
 
 
-import mailConfig from '../config/mailConfig.js';
+import mailConfig from '../config/mail.js';
 
 const { host, port, auth } = mailConfig;
 

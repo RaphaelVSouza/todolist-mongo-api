@@ -18,7 +18,7 @@ import validatePasswordStore from './app/validators/PasswordStore.js';
 import validatePasswordUpdate from './app/validators/PasswordUpdate.js';
 import validateSessionStore from './app/validators/SessionStore.js';
 
-import redisConfig from './config/redisConfig.js';
+import redisConfig from './config/redis.js';
 
 const store = new RedisStore(redisConfig);
 const bruteforce = new ExpressBrute(store);
