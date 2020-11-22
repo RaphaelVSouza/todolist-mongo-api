@@ -1,7 +1,10 @@
-const mailConfig = require('../config/mailConfig.js');
-const hbs = require('nodemailer-express-handlebars');
-const { resolve } = require('path');
-const nodemailer = require('nodemailer');
+import { fileURLToPath } from 'url';
+import hbs from 'nodemailer-express-handlebars';
+import { resolve, dirname } from 'path';
+import nodemailer from 'nodemailer';
+
+
+import mailConfig from '../config/mailConfig.js';
 
 const { host, port, auth } = mailConfig;
 
@@ -17,7 +20,7 @@ class Mail {
   }
 
   configureTemplates() {
-    const viewPath = resolve(__dirname, '..', 'app', 'views', 'email');
+    const viewPath = resolve(fileURLToPath(import.meta.url), '..', 'app', 'views', 'email');
 
     this.transporter.use(
       'compile',
@@ -39,4 +42,4 @@ class Mail {
   }
 }
 
-module.exports = new Mail();
+export default new Mail();

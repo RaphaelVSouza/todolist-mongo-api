@@ -1,7 +1,7 @@
-const crypto = require('crypto');
-const User = require('../schemas/Users');
-const Queue = require('../../lib/queue');
-const VerifyMail = require('../jobs/VerifyMail');
+import crypto from 'crypto';
+import User from '../schemas/Users.js';
+import Queue from '../../lib/queue.js';
+import VerifyMail from '../jobs/VerifyMail.js';
 
 const apiUrl = process.env.SERVER_URL;
 
@@ -62,4 +62,4 @@ class UserMailController {
        
 }
 
-module.exports = new UserMailController();
+export default new UserMailController();

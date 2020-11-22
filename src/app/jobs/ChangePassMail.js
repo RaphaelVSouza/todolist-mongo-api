@@ -1,4 +1,4 @@
-const Mail = require('../../lib/mail');
+import Mail from '../../lib/mail.js';
 
 class ChangePasswordMail {
 
@@ -20,5 +20,5 @@ class ChangePasswordMail {
     }
 }
 
-module.exports = new ChangePasswordMail();
+export default new ChangePasswordMail();
 

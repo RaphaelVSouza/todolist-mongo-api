@@ -1,30 +1,28 @@
-const { Router } = require('express');
-const ExpressBrute = require('express-brute');
-const RedisStore = require('express-brute-redis');
+import { Router } from 'express';
+import ExpressBrute from 'express-brute';
+import RedisStore from 'express-brute-redis';
 
+import authMiddleware from './app/middlewares/auth.js';
+import errorMiddleware from './app/middlewares/error.js';
 
-const routes = new Router();
-const authMiddleware = require('./app/middlewares/auth');
-const errorMiddleware = require('./app/middlewares/error');
+import UserController from './app/controllers/UserController.js';
+import SessionController from './app/controllers/SessionController.js';
+import PasswordController from './app/controllers/PasswordController.js';
+import ProjectController from './app/controllers/ProjectController.js';
+import TaskController from './app/controllers/TaskController.js';
+import UserMailController from './app/controllers/UserMailController.js';
 
-const redisConfig = require('./config/redisConfig');
+import validateUserStore from './app/validators/UserStore.js';
+import validateUserUpdate from './app/validators/UserUpdate.js';
+import validatePasswordStore from './app/validators/PasswordStore.js';
+import validatePasswordUpdate from './app/validators/PasswordUpdate.js';
+import validateSessionStore from './app/validators/SessionStore.js';
+
+import redisConfig from './config/redisConfig.js';
 
 const store = new RedisStore(redisConfig);
-    
 const bruteforce = new ExpressBrute(store);
-
-const UserController = require('./app/controllers/UserController');
-const SessionController = require('./app/controllers/SessionController');
-const PasswordController = require('./app/controllers/PasswordController');
-const ProjectController = require('./app/controllers/ProjectController');
-const TaskController = require('./app/controllers/TaskController');
-const UserMailController = require('./app/controllers/UserMailController');
-
-const validateUserStore = require('./app/validators/UserStore');
-const validateUserUpdate = require('./app/validators/UserUpdate');
-const validatePasswordStore = require('./app/validators/PasswordStore');
-const validatePasswordUpdate = require('./app/validators/PasswordUpdate');
-const validateSessionStore = require('./app/validators/SessionStore');
+const routes = new Router();
 
 routes.post('/user-management/register', validateUserStore, UserController.store);
 
@@ -51,4 +49,4 @@ routes.put('/projects/task', TaskController.update);
 
 routes.use(errorMiddleware);
 
-module.exports = routes;
+export default routes;

@@ -1,5 +1,6 @@
-require('dotenv').config()
-module.exports = {
+import'dotenv/config.js';
+
+export default {
     host: process.env.MAIL_HOST,
     port: process.env.MAIL_PORT,
     auth: {

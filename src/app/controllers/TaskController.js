@@ -1,4 +1,4 @@
-const Task = require('../schemas/Tasks');
+import Task from '../schemas/Tasks.js';
 
 class TaskController {
     async update(req, res) {
@@ -15,11 +15,11 @@ class TaskController {
         }
 
         task.save();
-        
+
         return res.json(task);
 
 
     }
 }
 
-module.exports = new TaskController();
+export default new TaskController();

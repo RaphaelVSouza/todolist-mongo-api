@@ -1,8 +1,9 @@
-const User = require('../schemas/Users');
-const crypto = require('crypto');
+import crypto from 'crypto';
+import User from '../schemas/Users.js';
 
-const Queue = require('../../lib/queue');
-const ChangePassMail = require('../jobs/ChangePassMail');
+
+import Queue from '../../lib/queue.js';
+import ChangePassMail from '../jobs/ChangePassMail.js';
 
 const apiUrl = process.env.SERVER_URL;
 
@@ -73,4 +74,4 @@ class PasswordController {
     }
 }
 
-module.exports = new PasswordController();
+export default new PasswordController();

@@ -1,6 +1,6 @@
-const Yup = require('yup');
+import Yup from 'yup';
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
 
     try {
         const validationSchema = Yup.object().shape({

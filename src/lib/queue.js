@@ -1,8 +1,8 @@
-const Bee = require('bee-queue');
-const redisConfig = require('../config/redisConfig');
+import Bee from 'bee-queue';
+import redisConfig from '../config/redisConfig.js';
 
-const VerifyMail = require('../app/jobs/VerifyMail');
-const ChangePassMail = require('../app/jobs/ChangePassMail');
+import VerifyMail from '../app/jobs/VerifyMail.js';
+import ChangePassMail from '../app/jobs/ChangePassMail.js';
 
 const jobs = [VerifyMail, ChangePassMail];
 
@@ -39,4 +39,4 @@ class Queue {
       }
 }
 
-module.exports = new Queue();
+export default new Queue();

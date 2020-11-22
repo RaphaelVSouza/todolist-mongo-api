@@ -1,5 +1,6 @@
 {
   "name": "loginjwt",
+  "type": "module",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -8,6 +9,8 @@
     "dev:queue": "nodemon src/queue.js"
   },
   "dependencies": {
+    "@sentry/node": "^5.27.4",
+    "@sentry/tracing": "^5.27.4",
     "bcryptjs": "^2.4.3",
     "bee-queue": "^1.3.1",
     "cors": "^2.8.5",

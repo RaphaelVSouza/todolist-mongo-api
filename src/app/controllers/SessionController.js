@@ -1,5 +1,5 @@
-const User = require('../schemas/Users');
-const bcrypt = require('bcryptjs');
+import bcrypt from 'bcryptjs';
+import User from '../schemas/Users.js';
 
 class SessionController {
     async store(req, res) {
@@ -28,4 +28,4 @@ class SessionController {
 
 }
 
-module.exports = new SessionController();
+export default new SessionController();

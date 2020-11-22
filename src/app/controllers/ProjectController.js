@@ -1,6 +1,7 @@
-const Project = require('../schemas/Projects');
-const Task = require('../schemas/Tasks');
-const Yup = require('yup');
+import Yup from 'yup';
+
+import Project from '../schemas/Projects.js';
+import Task from '../schemas/Tasks.js';
 
 class ProjectController {
     async store(req, res) {
@@ -38,7 +39,7 @@ class ProjectController {
                 await Promise.all( tasks.map(async task => {
                         if(task.hasOwnProperty('title')) {
                                 if(!task.title) task.title = 'No title';
-                                
+
                                 const projectTask = new Task({ title: task.title, project: project._id});
         
                                 await projectTask.save();
@@ -127,4 +128,4 @@ class ProjectController {
     
 }
 
-module.exports = new ProjectController();
+export default new ProjectController();

@@ -1,6 +1,6 @@
-require('dotenv').config();
+import 'dotenv/config.js';
 
-const Queue = require('./lib/queue');
+import Queue from './lib/queue.js';
 
 Queue.processQueue();
 

@@ -1,7 +1,4 @@
-const { verify } = require('jsonwebtoken');
-const Mail = require('../../lib/mail');
-
-
+import Mail from '../../lib/mail.js';
 
 class VerifyEmail {
     get key() {
@@ -23,4 +20,4 @@ class VerifyEmail {
 }
   
 
-module.exports = new VerifyEmail();
+export default new VerifyEmail();

@@ -1,5 +1,5 @@
-const User = require('../schemas/Users');
-const UserMailController = require('./UserMailController');
+import User from '../schemas/Users.js';
+import UserMailController from './UserMailController.js';
 
 class UserController {
    async store (req, res) {
@@ -52,6 +52,6 @@ class UserController {
 }
 
 
-module.exports = new UserController();
+export default new UserController();
 
 

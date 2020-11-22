@@ -1,17 +1,20 @@
-const express = require('express');
-const routes = require('./routes');
+import express from 'express';
+import Sentry from '@sentry/node';
+import Tracing from '@sentry/tracing';
+import routes from './routes.js';
 
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
+
+import helmet  from 'helmet';
+import rateLimit from 'express-rate-limit';
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100 // limit each IP to 100 requests per windowMs
   });
 
-require('dotenv').config();
+import 'dotenv/config.js';
 
-require('./database/mongo')
+import './database/mongo.js';
 
 class App {
     constructor() {
@@ -35,4 +38,4 @@ class App {
     
 }
 
-module.exports = new App().server;
+export default new App().server;

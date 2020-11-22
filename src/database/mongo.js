@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 class MongoDB {
   constructor() {
@@ -46,4 +46,4 @@ class MongoDB {
 
 }
 
-module.exports = new MongoDB();
+export default new MongoDB();

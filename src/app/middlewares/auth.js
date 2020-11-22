@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
-const { promisify } = require('util');
-const authConfig = require('../../config/auth.js');
+import jwt from 'jsonwebtoken';
+import { promisify } from 'util';
+import authConfig from '../../config/auth.js';
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     const jwtBodyTest = new RegExp('^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$');
