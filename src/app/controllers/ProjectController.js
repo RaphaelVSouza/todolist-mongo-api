@@ -1,5 +1,3 @@
-import Yup from 'yup';
-
 import Project from '../schemas/Projects.js';
 import Task from '../schemas/Tasks.js';
 
