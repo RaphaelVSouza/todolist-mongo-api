@@ -15,7 +15,7 @@ class ProjectController {
 
             if(!title) title = 'No title';
                     
-            if(!description) description = 'No description';
+            if(!description) description = null;
                    
 
             const project = await Project.create({title, description, user: userId});
@@ -80,7 +80,7 @@ class ProjectController {
 
             if(!title) title = 'No title';
 
-        if(!description) description = 'No description';
+        if(!description) description = null;
 
 
             const project = await Project.findByIdAndUpdate(req.params.projectId, {
