@@ -6,24 +6,11 @@ import Task from '../schemas/Tasks.js';
 class ProjectController {
     async store(req, res) {
 
-                const validationSchema = Yup.object().shape({
-                        title: Yup.string(),
-                        description: Yup.string(),
-                        tasks: Yup.array().of(Yup.object().shape({
-                                title: Yup.string(),
-                              })).min(1),
-                })
-
-                if(!(await validationSchema.isValid(req.body))) 
-                        return res.status(400).send({ error: 'Validation fails'})
-
-        
                         const { userId } = req.user;
 
                         if(!userId) 
                         return res.status(401).send({error: 'You must be logged in to see your projects'});
                        
-
 
             let { title, description, tasks } = req.body;
 
@@ -69,7 +56,7 @@ class ProjectController {
       
     }
     async show(req, res) {
-            const projectId = req.params.projectId;
+            const { projectId } = req.params;
 
             if(!projectId)
                 return res.status(400).send({ error: 'ProjectId must be passed' });
