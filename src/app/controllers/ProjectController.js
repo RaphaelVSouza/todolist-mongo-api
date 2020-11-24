@@ -3,6 +3,7 @@ import Yup from 'yup';
 import Project from '../schemas/Projects.js';
 import Task from '../schemas/Tasks.js';
 
+
 class ProjectController {
     async store(req, res) {
 
@@ -44,15 +45,17 @@ class ProjectController {
         
     }
     async index(req, res) {
-        const { userId } = req.user;
 
-        if(!userId) 
-        return res.status(401).send({error: 'You must be logged in to see your projects'});
-       
-            const projects = await Project.find({ user: userId})
-            .populate('tasks').populate({path: 'user', select: 'name'});
-
-            return res.json({ projects });
+            const { userId } = req.user;
+    
+            if(!userId) 
+            return res.status(401).send({error: 'You must be logged in to see your projects'});
+           
+                const projects = await Project.find({ user: userId})
+                .populate('tasks').populate({path: 'user', select: 'name'});
+    
+                return res.json({ projects });
+    
       
     }
     async show(req, res) {
