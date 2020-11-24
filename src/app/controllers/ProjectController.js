@@ -18,8 +18,11 @@ class ProjectController {
                         return res.status(400).send({ error: 'Validation fails'})
 
         
-                if(!req.userId) 
-                        return res.status(401).send({error: 'You must be logged in to create projects'})
+                        const { userId } = req.user;
+
+                        if(!userId) 
+                        return res.status(401).send({error: 'You must be logged in to see your projects'});
+                       
 
 
             let { title, description, tasks } = req.body;
@@ -29,7 +32,7 @@ class ProjectController {
             if(!description) description = 'No description';
                    
 
-            const project = await Project.create({title, description, user: req.userId});
+            const project = await Project.create({title, description, user: userId});
 
             /**
              * Handle and wait all tasks to be saved at project
@@ -54,11 +57,12 @@ class ProjectController {
         
     }
     async index(req, res) {
-        
-        if(!req.userId) 
+        const { userId } = req.user;
+
+        if(!userId) 
         return res.status(401).send({error: 'You must be logged in to see your projects'});
        
-            const projects = await Project.find({ user: req.userId})
+            const projects = await Project.find({ user: userId})
             .populate('tasks').populate({path: 'user', select: 'name'});
 
             return res.json({ projects });
@@ -78,6 +82,11 @@ class ProjectController {
       
     }
     async update(req, res) {
+        const { userId } = req.user;
+
+        if(!userId) 
+        return res.status(401).send({error: 'You must be logged in to see your projects'});
+       
       
             let { title, description, tasks } = req.body;
 
@@ -117,10 +126,12 @@ class ProjectController {
     }
     async delete(req, res) {
             const { projectId } = req.params;
-        if(!req.userId) 
-                return res.status(401).send({error: 'You must be logged in to delete your projects'});
+            const { userId } = req.user;
 
-        if(!projectId)
+            if(!userId) 
+            return res.status(401).send({error: 'You must be logged in to see your projects'});
+           
+            if(!projectId)
                 return res.status(400).send({ error: 'ProjectId must be passed' });
 
             await Project.findByIdAndDelete(projectId, {useFindAndModify:false}).populate('user')

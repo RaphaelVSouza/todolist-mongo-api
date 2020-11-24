@@ -50,7 +50,7 @@ class UserMailController {
       user.verifiedEmail = true;
       user.save();
     
-     return res.json({message: 'Email verified successfully'});
+     return res.json({ message: 'Email verified successfully' });
       }
        
 }

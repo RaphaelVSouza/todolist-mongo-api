@@ -2,6 +2,8 @@ import express from 'express';
 import Sentry from '@sentry/node';
 import Tracing from '@sentry/tracing';
 import routes from './routes.js';
+import applyPassportStrategy from './app/middlewares/auth.js';
+import passport from 'passport';
 
 import helmet  from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -25,6 +27,7 @@ class App {
     middlewares() {
         this.server.use(helmet());
         this.server.use(limiter);
+        applyPassportStrategy(passport);
         // RequestHandler creates a separate execution context using domains, so that every
         // transaction/span/breadcrumb is attached to its own Hub instance
         this.server.use(Sentry.Handlers.requestHandler());

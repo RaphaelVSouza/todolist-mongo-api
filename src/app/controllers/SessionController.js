@@ -18,7 +18,17 @@ class SessionController {
 
         const { id, name } = user;
         
-            return res.json({id, name, email, token:user.generateToken({id: user.id})});
+            return res.json({id,
+                 name,
+                 email,
+                 token:user.generateAcessToken({id: user.id}),
+                 });
+    }
+
+    async update(req, res) {
+     
+
+
     }
 }
 

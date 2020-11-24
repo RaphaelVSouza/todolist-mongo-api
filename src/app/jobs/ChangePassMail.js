@@ -7,7 +7,7 @@ class ChangePasswordMail {
     }
 
     async handle({data}) {
-
+     
         const { email, resetToken, apiUrl } = data;
 
         await Mail.sendMail({

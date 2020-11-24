@@ -2,8 +2,11 @@ import Task from '../schemas/Tasks.js';
 
 class TaskController {
     async update(req, res) {
-        if(!req.userId) 
+        const { userId } = req.user;
+
+        if(!userId) 
         return res.status(401).send({error: 'You must be logged in to see your projects'});
+       
         
         const taskId = req.body.taskId;
 

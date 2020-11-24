@@ -17,13 +17,15 @@ class UserController {
 
         return res.json({
           id, name, email,
-          message: `A verify email is sent to ${email}`}); 
+          message: `A verify email is beign sent to ${email}`}); 
    }
 
    async update(req, res) {
-    const { userId } = req;
-    if (!userId) 
-      return res.status(401).send({ error: 'You need to be logged in' });
+    const { userId } = req.user;
+
+        if(!userId) 
+        return res.status(401).send({error: 'You must be logged in to see your projects'});
+       
 
     const { email, oldPassword } = req.body;
 

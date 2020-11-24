@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import ExpressBrute from 'express-brute';
 import RedisStore from 'express-brute-redis';
+import passport from 'passport';
 
-import authMiddleware from './app/middlewares/auth.js';
 import errorMiddleware from './app/middlewares/error.js';
 
 import UserController from './app/controllers/UserController.js';
@@ -26,7 +26,6 @@ const routes = new Router();
 
 routes.post('/user-management/register', validateUserStore, UserController.store);
 
-
 routes.post('/user-management/login', bruteforce.prevent, validateSessionStore,  SessionController.store);
 
 routes.get('/user-management/verify_email/:verifyToken', UserMailController.verifyEmail);
@@ -34,18 +33,19 @@ routes.get('/user-management/verify_email/:verifyToken', UserMailController.veri
 routes.post('/user-management/forgot_password', validatePasswordStore, PasswordController.store);
 routes.post('/user-management/reset_password/:resetToken', validatePasswordUpdate, PasswordController.update);
 
-
 // Protected routes
 
-routes.put('/user-management/edit', authMiddleware, validateUserUpdate, UserController.update);
+routes.put('/user-management/refresh', SessionController.update);
 
-routes.post('/projects/new', authMiddleware, ProjectController.store);
-routes.get('/projects',authMiddleware, ProjectController.index);
-routes.get('/projects/:projectId', authMiddleware, ProjectController.show);
-routes.put('/projects/:projectId/edit', authMiddleware, ProjectController.update);
-routes.delete('/projects/:projectId/delete', authMiddleware, ProjectController.delete);
+routes.put('/user-management/edit', passport.authenticate('jwt', { session: false}), validateUserUpdate, UserController.update);
 
-routes.put('/projects/task', TaskController.update);
+routes.post('/projects/new', passport.authenticate('jwt', { session: false}), ProjectController.store);
+routes.get('/projects',passport.authenticate('jwt', { session: false}), ProjectController.index);
+routes.get('/projects/:projectId', passport.authenticate('jwt', { session: false}), ProjectController.show);
+routes.put('/projects/:projectId/edit', passport.authenticate('jwt', { session: false}), ProjectController.update);
+routes.delete('/projects/:projectId/delete', passport.authenticate('jwt', { session: false}), ProjectController.delete);
+
+routes.put('/projects/task',passport.authenticate('jwt', { session: false}), TaskController.update);
 
 routes.use(errorMiddleware);
 

@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-
 const ProjectSchema = new mongoose.Schema(
     {
     title: {
@@ -14,9 +13,6 @@ const ProjectSchema = new mongoose.Schema(
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        
-       
-
     },
     tasks: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -26,9 +22,6 @@ const ProjectSchema = new mongoose.Schema(
    
 },
 );
-
-
-
 
 const Project = mongoose.model('Project', ProjectSchema)
 

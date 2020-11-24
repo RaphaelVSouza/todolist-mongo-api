@@ -6,7 +6,7 @@ class VerifyEmail {
     }
 
     async handle({ data }) {
-        
+       
         const { email, verifyToken, apiUrl } = data;
 
             await Mail.sendMail({

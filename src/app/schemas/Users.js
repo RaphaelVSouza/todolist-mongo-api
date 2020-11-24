@@ -61,8 +61,6 @@ UserSchema.methods.generateToken = function(params = {}) {
     return jwt.sign( params, authConfig.secret, { expiresIn: '2d'} )
 };
 
-
-
 const User = mongoose.model('User', UserSchema);
 
 export default User;
