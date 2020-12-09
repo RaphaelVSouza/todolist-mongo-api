@@ -23,11 +23,16 @@ import validateProjectUpdate from './app/validators/ProjectUpdate.js';
 
 import redisConfig from './config/redis.js';
 
+let retries = 2;
 const store = new RedisStore(redisConfig);
-const bruteforce = new ExpressBrute(store);
+if(process.env.NODE_ENV !== 'production')
+  retries = 9999;
+
+const bruteforce = new ExpressBrute(store, {freeRetries: retries});
+
 const routes = new Router();
 
-routes.post('/user-management/register', validateUserStore, UserController.store);
+routes.post('/user-management/register',validateUserStore, UserController.store);
 
 routes.post('/user-management/login', bruteforce.prevent, validateSessionStore,  SessionController.store);
 

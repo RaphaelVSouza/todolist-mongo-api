@@ -1,5 +1,4 @@
 import 'dotenv/config.js';
-
 import express from 'express';
 
 import applyPassportStrategy from './app/middlewares/auth.js';
@@ -10,7 +9,7 @@ import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 
 import * as Sentry from '@sentry/node';
-import Tracing from '@sentry/tracing';
+import * as Tracing from '@sentry/tracing';
 
 
 import routes from './routes.js';
@@ -20,6 +19,7 @@ import limiterConfig from './config/limiter.js';
 
 import './database/mongo.js';
 
+
 const limiter = rateLimit(limiterConfig);
 class App {
     constructor() {
@@ -28,16 +28,25 @@ class App {
         this.middlewares();
         this.routes();
     }
+
     middlewares() {
         this.server.use(express.json());
         this.server.use(express.urlencoded({extended:false}));
-        
+
         applyPassportStrategy(passport);
 
         this.server.use(helmet());
-        this.server.use(limiter);
+
+       if(process.env.NODE_ENV === 'production') {
         this.server.use(morgan('combined', { stream: acessLog }));
-        
+        this.server.use(limiter);
+       } else {
+        this.server.use(morgan('dev'));
+       }
+
+
+
+
     }
     routes() {
         this.server.use(routes);
@@ -62,17 +71,17 @@ class App {
         this.server.use(Sentry.Handlers.requestHandler());
         // TracingHandler creates a trace for every incoming request
         this.server.use(Sentry.Handlers.tracingHandler());
-        
+
         // The error handler must be before any other error middleware and after all controllers
         this.server.use(Sentry.Handlers.errorHandler());
 
         this.server.use(function onError(err, req, res, next) {
           // The error id is attached to `res.sentry` to be returned
-          // and optionally displayed to the user for support. 
+          // and optionally displayed to the user for support.
           console.error(err)
             res.status(500).end(`${res.sentry} \n`);
-          
-           
+
+
         });
     }
 

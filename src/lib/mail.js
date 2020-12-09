@@ -1,8 +1,11 @@
-import { fileURLToPath } from 'url';
 import hbs from 'nodemailer-express-handlebars';
-import { resolve, dirname } from 'path';
+
 import nodemailer from 'nodemailer';
 
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+//const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import mailConfig from '../config/mail.js';
 
@@ -20,15 +23,15 @@ class Mail {
   }
 
   configureTemplates() {
-    const viewPath = resolve(fileURLToPath(import.meta.url), '..', 'app', 'views', 'email');
+    const viewPath = path.resolve(__dirname, '..', 'app', 'views', 'email');
 
     this.transporter.use(
       'compile',
       hbs({
         viewEngine: {
-          layoutsDir: resolve(viewPath, 'layouts'),
+          layoutsDir: path.resolve(viewPath, 'layouts'),
           defaultLayout: 'default',
-          partialsDir: resolve(viewPath, 'partials'),
+          partialsDir: path.resolve(viewPath, 'partials'),
           extname: '.hbs',
         },
         viewPath,

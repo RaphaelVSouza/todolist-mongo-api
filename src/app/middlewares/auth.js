@@ -3,8 +3,10 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 import User from '../schemas/Users.js';
 
 const applyPassportStrategy =  (passport => {
+
     const options = {};
     options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+
     options.secretOrKey = authConfig.secret;
     passport.use(
       new Strategy(options, (payload, done) => {
@@ -21,5 +23,5 @@ const applyPassportStrategy =  (passport => {
     );
   });
 
-  
+
 export default applyPassportStrategy;

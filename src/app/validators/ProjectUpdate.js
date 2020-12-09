@@ -1,5 +1,4 @@
-import Yup from 'yup';
-
+import * as Yup from 'yup';
 export default async (req, res, next) => {
 
     try {

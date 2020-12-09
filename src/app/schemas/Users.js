@@ -21,18 +21,6 @@ const UserSchema = new mongoose.Schema(
         required: true,
         select: false,
     },
-    verifyEmailToken: {
-        type: String,
-        select: false,
-    },
-    verifyEmailExpires: {
-        type: Date,
-        select: false,
-    },
-    verifiedEmail: {
-        type: Boolean,
-        default: false,
-    },
     passwordResetToken: {
         type: String,
       select: false,
@@ -41,11 +29,15 @@ const UserSchema = new mongoose.Schema(
         type: Date,
       select: false,
     },
-   
-   
+    isVerified: {
+      type: Boolean,
+      default: false,
+      required: true,
+  },
+
 },
- { 
-    timestamps: true 
+ {
+    timestamps: true
 },
 );
 
@@ -57,8 +49,12 @@ UserSchema.pre('save', async function(next) {
     next();
 })
 
-UserSchema.methods.generateToken = function(params = {}) {
+UserSchema.methods.generateAccessToken = function(params = {}) {
     return jwt.sign( params, authConfig.secret, { expiresIn: '2d'} )
+};
+
+UserSchema.methods.comparePassword = async function(password, dbpassword) {
+  return await bcrypt.compare(password, dbpassword)
 };
 
 const User = mongoose.model('User', UserSchema);

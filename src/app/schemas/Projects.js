@@ -8,7 +8,7 @@ const ProjectSchema = new mongoose.Schema(
     },
     description: {
         type: String,
-       
+
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -19,7 +19,7 @@ const ProjectSchema = new mongoose.Schema(
         ref: 'Task',
     }]
 
-   
+
 },
 );
 
