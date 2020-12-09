@@ -294,8 +294,8 @@ describe('User Acess Suite', function () {
 
       })
 
-      // Need to fix
-/*
+
+
       it('should be able to change password', async () => {
 
         let user = await factory.attrs('User');
@@ -334,7 +334,7 @@ describe('User Acess Suite', function () {
 
           expect(compare).toBe(false);
         })
-*/
+
 
 });
 
