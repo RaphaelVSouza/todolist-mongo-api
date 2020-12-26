@@ -7,16 +7,16 @@ class ProjectController {
 
                         const { userId } = req.user;
 
-                        if(!userId) 
+                        if(!userId)
                         return res.status(401).send({error: 'You must be logged in to see your projects'});
-                       
+
 
             let { title, description, tasks } = req.body;
 
             if(!title) title = 'No title';
-                    
+
             if(!description) description = null;
-                   
+
 
             const project = await Project.create({title, description, user: userId});
 
@@ -30,52 +30,60 @@ class ProjectController {
                                 if(!task.title) task.title = 'No title';
 
                                 const projectTask = new Task({ title: task.title, project: project._id});
-        
+
                                 await projectTask.save();
-                
+
                                 project.tasks.push(projectTask);
                         }
                     }));
                     await project.save();
              }
-           
+
             return res.json(project);
-        
+
     }
     async index(req, res) {
 
             const { userId } = req.user;
-    
-            if(!userId) 
+            let { skip, limit } = req.query;
+      console.log({skip, limit})
+            if(!userId)
             return res.status(401).send({error: 'You must be logged in to see your projects'});
-           
+
+            if(!skip) skip = 0;
+
+            if(!limit) limit = 0;
+
                 const projects = await Project.find({ user: userId})
-                .populate('tasks').populate({path: 'user', select: 'name'});
-    
+                .skip(parseInt(skip))
+                .limit(parseInt(limit))
+                .populate('tasks')
+                .populate({path: 'user', select: 'name'});
+                console.log(projects.length)
                 return res.json({ projects });
-    
-      
+
+
     }
     async show(req, res) {
             const { projectId } = req.params;
 
             if(!projectId)
                 return res.status(400).send({ error: 'ProjectId must be passed' });
-      
+
             const project = await Project.findById()
             .populate('tasks').populate({path: 'user', select: 'name'});
 
 
             return res.json(project);
-      
+
     }
     async update(req, res) {
         const { userId } = req.user;
 
-        if(!userId) 
+        if(!userId)
         return res.status(401).send({error: 'You must be logged in to see your projects'});
-       
-      
+
+
             let { title, description, tasks } = req.body;
 
             if(!title) title = 'No title';
@@ -106,27 +114,27 @@ class ProjectController {
 
                 project.tasks.push(projectTask);
             }));
-            
+
             await project.save();
 
             return res.json(project);
-    
+
     }
     async delete(req, res) {
             const { projectId } = req.params;
             const { userId } = req.user;
 
-            if(!userId) 
+            if(!userId)
             return res.status(401).send({error: 'You must be logged in to see your projects'});
-           
+
             if(!projectId)
                 return res.status(400).send({ error: 'ProjectId must be passed' });
 
             await Project.findByIdAndDelete(projectId, {useFindAndModify:false}).populate('user')
             return res.send({ message: 'Project removed' });
-       
+
     }
-    
+
 }
 
 export default new ProjectController();
