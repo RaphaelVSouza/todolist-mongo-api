@@ -4,8 +4,8 @@ export default async (req, res, next) => {
 
     try {
         const validationSchema = Yup.object().shape({
-            email: Yup.string().email().required(),
-            password: Yup.string().required(),
+            email: Yup.string().email().min(3).max(100).required(),
+            password: Yup.string().min(3).max(100).required(),
         });
 
         await validationSchema.validate(req.body, { abortEarly: false });

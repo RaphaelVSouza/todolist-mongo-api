@@ -4,9 +4,9 @@ export default async (req, res, next) => {
 
     try {
         const validationSchema = Yup.object().shape({
-            name: Yup.string().required(),
-            email: Yup.string().email().required(),
-            password: Yup.string().required(),
+            name: Yup.string().min(3).max(100).required(),
+            email: Yup.string().email().min(3).max(100).required(),
+            password: Yup.string().min(3).max(100).required(),
             confirmPassword: Yup.string().when('password', {
               is: (password) => (password && password.length > 0 ? true : false),
               then: Yup.string()

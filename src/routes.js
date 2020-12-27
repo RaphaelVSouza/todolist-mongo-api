@@ -19,7 +19,7 @@ import validatePasswordUpdate from './app/validators/PasswordUpdate.js';
 import validateSessionStore from './app/validators/SessionStore.js';
 import validateProjectStore from './app/validators/ProjectStore.js';
 import validateProjectUpdate from './app/validators/ProjectUpdate.js';
-
+import validateProjectIndex from './app/validators/ProjectIndex.js';
 
 import redisConfig from './config/redis.js';
 
@@ -48,7 +48,7 @@ routes.put('/user-management/refresh', SessionController.update);
 routes.put('/user-management/edit', passport.authenticate('jwt', { session: false}), validateUserUpdate, UserController.update);
 
 routes.post('/projects/new',validateProjectStore, passport.authenticate('jwt', { session: false}), ProjectController.store);
-routes.get('/projects',passport.authenticate('jwt', { session: false}), ProjectController.index);
+routes.get('/projects',passport.authenticate('jwt', { session: false}), validateProjectIndex, ProjectController.index);
 routes.get('/projects/:projectId', passport.authenticate('jwt', { session: false}), ProjectController.show);
 routes.put('/projects/:projectId/edit', validateProjectUpdate, passport.authenticate('jwt', { session: false}), ProjectController.update);
 routes.delete('/projects/:projectId/delete', passport.authenticate('jwt', { session: false}), ProjectController.delete);

@@ -3,11 +3,11 @@ export default async (req, res, next) => {
 
     try {
         const validationSchema = Yup.object().shape({
-            title: Yup.string(),
-            description: Yup.string(),
+            title: Yup.string().min(1).max(100),
+            description: Yup.string().min(1).max(100),
             tasks: Yup.array().of(Yup.object().shape({
-                    title: Yup.string(),
-                  })).min(1),
+                    title: Yup.string().min(1).max(100),
+                  })).min(1).max(100),
     })
 
         await validationSchema.validate(req.body, { abortEarly: false });

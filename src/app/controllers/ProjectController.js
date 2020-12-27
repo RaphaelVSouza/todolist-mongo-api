@@ -42,24 +42,28 @@ class ProjectController {
             return res.json(project);
 
     }
+
     async index(req, res) {
 
             const { userId } = req.user;
-            let { skip, limit } = req.query;
-      console.log({skip, limit})
+
+            let { title, skip, limit } = req.query;
+
+            const query =
+              title
+              ?
+              { title: {$regex: `.*${title}*.`}}
+              : null;
+
             if(!userId)
-            return res.status(401).send({error: 'You must be logged in to see your projects'});
+            return res.status(401).send({ error: 'You must be logged in to see your projects' });
 
-            if(!skip) skip = 0;
-
-            if(!limit) limit = 0;
-
-                const projects = await Project.find({ user: userId})
+                const projects = await Project.find({ user: userId, query })
                 .skip(parseInt(skip))
                 .limit(parseInt(limit))
                 .populate('tasks')
-                .populate({path: 'user', select: 'name'});
-                console.log(projects.length)
+                .populate({ path: 'user', select: 'name' });
+
                 return res.json({ projects });
 
 
