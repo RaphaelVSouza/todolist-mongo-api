@@ -5,7 +5,7 @@ import nodemailer from 'nodemailer';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
-//const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import mailConfig from '../config/mail.js';
 
@@ -36,7 +36,7 @@ class Mail {
         },
         viewPath,
         extName: '.hbs',
-      })
+      }),
     );
   }
 

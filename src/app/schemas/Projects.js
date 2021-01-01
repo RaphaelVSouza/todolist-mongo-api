@@ -1,28 +1,25 @@
 import mongoose from 'mongoose';
 
-const ProjectSchema = new mongoose.Schema(
+const ProjectSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  tasks: [
     {
-    title: {
-        type: String,
-        required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Task',
     },
-    description: {
-        type: String,
+  ],
+});
 
-    },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-    },
-    tasks: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Task',
-    }]
-
-
-},
-);
-
-const Project = mongoose.model('Project', ProjectSchema)
+const Project = mongoose.model('Project', ProjectSchema);
 
 export default Project;

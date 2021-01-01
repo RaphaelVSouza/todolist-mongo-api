@@ -1,144 +1,131 @@
 import Project from '../schemas/Projects.js';
 import Task from '../schemas/Tasks.js';
 
-
 class ProjectController {
-    async store(req, res) {
+  async store(req, res) {
+    const { userId } = req.user;
 
-                        const { userId } = req.user;
+    if (!userId) return res.status(401).send({ error: 'You must be logged in to see your projects' });
 
-                        if(!userId)
-                        return res.status(401).send({error: 'You must be logged in to see your projects'});
+    let { title, description, tasks } = req.body;
 
+    if (!title) title = 'No title';
 
-            let { title, description, tasks } = req.body;
+    if (!description) description = null;
 
-            if(!title) title = 'No title';
+    const project = await Project.create({ title, description, user: userId });
 
-            if(!description) description = null;
+    /**
+         * Handle and wait all tasks to be saved at project
+         */
 
+    if (tasks) {
+      await Promise.all(
+        tasks.map(async (task) => {
+          if (task.hasOwnProperty('title')) {
+            if (!task.title) task.title = 'No title';
 
-            const project = await Project.create({title, description, user: userId});
+            const projectTask = new Task({ title: task.title, project: project._id });
 
-            /**
-             * Handle and wait all tasks to be saved at project
-             */
+            await projectTask.save();
 
-             if(tasks) {
-                await Promise.all( tasks.map(async task => {
-                        if(task.hasOwnProperty('title')) {
-                                if(!task.title) task.title = 'No title';
-
-                                const projectTask = new Task({ title: task.title, project: project._id});
-
-                                await projectTask.save();
-
-                                project.tasks.push(projectTask);
-                        }
-                    }));
-                    await project.save();
-             }
-
-            return res.json(project);
-
+            project.tasks.push(projectTask);
+          }
+        }),
+      );
+      await project.save();
     }
 
-    async index(req, res) {
+    return res.json(project);
+  }
 
-            const { userId } = req.user;
+  async index(req, res) {
+    const { userId } = req.user;
 
-            let { title, skip, limit } = req.query;
+    const { title, skip, limit } = req.query;
 
-            const query =
-              title
-              ?
-              { title: {$regex: `.*${title}*.`}}
-              : null;
+    const query = title ? { title: { $regex: `.*${title}*.` } } : null;
 
-            if(!userId)
-            return res.status(401).send({ error: 'You must be logged in to see your projects' });
+    if (!userId) return res.status(401).send({ error: 'You must be logged in to see your projects' });
 
-                const projects = await Project.find({ user: userId, query })
-                .skip(parseInt(skip))
-                .limit(parseInt(limit))
-                .populate('tasks')
-                .populate({ path: 'user', select: 'name' });
+    const projects = await Project.find({ user: userId, query })
+      .skip(parseInt(skip))
+      .limit(parseInt(limit))
+      .populate('tasks')
+      .populate({ path: 'user', select: 'name' });
 
-                return res.json({ projects });
+    return res.json({ projects });
+  }
 
+  async show(req, res) {
+    const { projectId } = req.params;
 
-    }
-    async show(req, res) {
-            const { projectId } = req.params;
+    if (!projectId) return res.status(400).send({ error: 'ProjectId must be passed' });
 
-            if(!projectId)
-                return res.status(400).send({ error: 'ProjectId must be passed' });
+    const project = await Project.findById()
+      .populate('tasks')
+      .populate({ path: 'user', select: 'name' });
 
-            const project = await Project.findById()
-            .populate('tasks').populate({path: 'user', select: 'name'});
+    return res.json(project);
+  }
 
+  async update(req, res) {
+    const { userId } = req.user;
 
-            return res.json(project);
+    if (!userId) return res.status(401).send({ error: 'You must be logged in to see your projects' });
 
-    }
-    async update(req, res) {
-        const { userId } = req.user;
+    let { title, description, tasks } = req.body;
 
-        if(!userId)
-        return res.status(401).send({error: 'You must be logged in to see your projects'});
+    if (!title) title = 'No title';
 
+    if (!description) description = null;
 
-            let { title, description, tasks } = req.body;
+    const project = await Project.findByIdAndUpdate(
+      req.params.projectId,
+      {
+        title,
+        description,
+      },
+      { new: true, useFindAndModify: false },
+    );
 
-            if(!title) title = 'No title';
+    /**
+         * Deleting tasks to add or modify new ones without duplicate
+         */
+    project.tasks = [];
 
-        if(!description) description = null;
+    await Task.deleteMany({ project: project._id });
 
+    /**
+         * Handle and wait all tasks to be saved in project
+         */
 
-            const project = await Project.findByIdAndUpdate(req.params.projectId, {
-                title,
-                description
-            }, { new: true, useFindAndModify: false});
+    await Promise.all(
+      tasks.map(async (task) => {
+        const projectTask = new Task({ ...task, project: project._id });
 
-            /**
-             * Deleting tasks to add or modify new ones without duplicate
-             */
-            project.tasks = [];
+        await projectTask.save();
 
-            await Task.deleteMany({ project: project._id});
+        project.tasks.push(projectTask);
+      }),
+    );
 
-            /**
-             * Handle and wait all tasks to be saved in project
-             */
+    await project.save();
 
-           await Promise.all( tasks.map(async task => {
-                const projectTask = new Task({ ...task, project: project._id});
+    return res.json(project);
+  }
 
-                await projectTask.save();
+  async delete(req, res) {
+    const { projectId } = req.params;
+    const { userId } = req.user;
 
-                project.tasks.push(projectTask);
-            }));
+    if (!userId) return res.status(401).send({ error: 'You must be logged in to see your projects' });
 
-            await project.save();
+    if (!projectId) return res.status(400).send({ error: 'ProjectId must be passed' });
 
-            return res.json(project);
-
-    }
-    async delete(req, res) {
-            const { projectId } = req.params;
-            const { userId } = req.user;
-
-            if(!userId)
-            return res.status(401).send({error: 'You must be logged in to see your projects'});
-
-            if(!projectId)
-                return res.status(400).send({ error: 'ProjectId must be passed' });
-
-            await Project.findByIdAndDelete(projectId, {useFindAndModify:false}).populate('user')
-            return res.send({ message: 'Project removed' });
-
-    }
-
+    await Project.findByIdAndDelete(projectId, { useFindAndModify: false }).populate('user');
+    return res.send({ message: 'Project removed' });
+  }
 }
 
 export default new ProjectController();

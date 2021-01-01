@@ -1,27 +1,23 @@
 import Task from '../schemas/Tasks.js';
 
 class TaskController {
-    async update(req, res) {
-        const { userId } = req.user;
+  async update(req, res) {
+    const { userId } = req.user;
 
-        if(!userId) 
-        return res.status(401).send({error: 'You must be logged in to see your projects'});
-       
-        
-        const taskId = req.body.taskId;
+    if (!userId) return res.status(401).send({ error: 'You must be logged in to see your projects' });
 
-        if(!taskId)
-            return res.status(400).send({ error: 'TaskId must be suplied'});
+    const { taskId } = req.body;
 
-        const task  = await Task.findById(taskId);
+    if (!taskId) return res.status(400).send({ error: 'TaskId must be suplied' });
 
-        task.completed ? task.completed = false : task.completed = true;
+    const task = await Task.findById(taskId);
 
-        task.save();
+    task.completed ? (task.completed = false) : (task.completed = true);
 
-        return res.json(task);
+    task.save();
 
-    }
+    return res.json(task);
+  }
 }
 
 export default new TaskController();

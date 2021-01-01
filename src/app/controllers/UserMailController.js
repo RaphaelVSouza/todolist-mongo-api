@@ -29,24 +29,15 @@ class UserMailController {
 
     const userMail = await UserMail.findOne({ verifyEmailToken: token });
 
-
-    if (!token && token != userMail.verifyEmailToken)
-      return res.status(401).send({ error: 'Token invalid' });
-
+    if (!token && token != userMail.verifyEmailToken) return res.status(401).send({ error: 'Token invalid' });
 
     const user = await User.findById(userMail.user);
 
-    if (user.isVerified === true)
-      return res.status(400).send({ error: 'Email is already verified' });
-
+    if (user.isVerified === true) return res.status(400).send({ error: 'Email is already verified' });
 
     const now = new Date();
 
-    if (now > userMail.verifyEmailExpires)
-      return res
-        .status(401)
-        .send({ error: 'Token expired, generate a new one' });
-
+    if (now > userMail.verifyEmailExpires) return res.status(401).send({ error: 'Token expired, generate a new one' });
 
     user.isVerified = true;
 
