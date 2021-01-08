@@ -22,6 +22,7 @@ class UserMailController {
     await userMail.save();
 
     await Queue.add(VerifyMail.key, { email, apiUrl, verifyToken });
+    return { verifyToken };
   }
 
   async verifyEmail(req, res) {
@@ -29,7 +30,7 @@ class UserMailController {
 
     const userMail = await UserMail.findOne({ verifyEmailToken: token });
 
-    if (!token && token != userMail.verifyEmailToken) return res.status(401).send({ error: 'Token invalid' });
+    if (!token && !userMail.verifyEmailToken) return res.status(401).send({ error: 'Token invalid' });
 
     const user = await User.findById(userMail.user);
 
