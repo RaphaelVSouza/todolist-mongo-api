@@ -1,35 +1,51 @@
 import { Router } from 'express';
 import ExpressBrute from 'express-brute';
 import RedisStore from 'express-brute-redis';
+
 import passport from 'passport';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocs from 'swagger-jsdoc';
 
-import errorMiddleware from './app/middlewares/error.js';
+import UserController from './app/controllers/UserController';
+import SessionController from './app/controllers/SessionController';
+import PasswordController from './app/controllers/PasswordController';
+import ProjectController from './app/controllers/ProjectController';
+import TaskController from './app/controllers/TaskController';
+import UserMailController from './app/controllers/UserMailController';
 
-import UserController from './app/controllers/UserController.js';
-import SessionController from './app/controllers/SessionController.js';
-import PasswordController from './app/controllers/PasswordController.js';
-import ProjectController from './app/controllers/ProjectController.js';
-import TaskController from './app/controllers/TaskController.js';
-import UserMailController from './app/controllers/UserMailController.js';
+import validateUserStore from './app/validators/UserStore';
+import validateUserUpdate from './app/validators/UserUpdate';
+import validatePasswordStore from './app/validators/PasswordStore';
+import validatePasswordUpdate from './app/validators/PasswordUpdate';
+import validateSessionStore from './app/validators/SessionStore';
+import validateProjectStore from './app/validators/ProjectStore';
+import validateProjectUpdate from './app/validators/ProjectUpdate';
+import validateProjectIndex from './app/validators/ProjectIndex';
 
-import validateUserStore from './app/validators/UserStore.js';
-import validateUserUpdate from './app/validators/UserUpdate.js';
-import validatePasswordStore from './app/validators/PasswordStore.js';
-import validatePasswordUpdate from './app/validators/PasswordUpdate.js';
-import validateSessionStore from './app/validators/SessionStore.js';
-import validateProjectStore from './app/validators/ProjectStore.js';
-import validateProjectUpdate from './app/validators/ProjectUpdate.js';
-import validateProjectIndex from './app/validators/ProjectIndex.js';
+import redisConfig from './config/redis';
+import swaggerOptions from '../documentation/docSwagger';
+import { retries } from './config/brute';
+import errorMiddleware from './app/middlewares/error';
 
-import redisConfig from './config/redis.js';
-
-let retries = 2;
 const store = new RedisStore(redisConfig);
-if (process.env.NODE_ENV !== 'production') retries = 9999;
+
+const jwtConfig = ['jwt', { session: false }];
 
 const bruteforce = new ExpressBrute(store, { freeRetries: retries });
 
 const routes = new Router();
+
+const specs = swaggerDocs(swaggerOptions);
+
+routes.use('/docs', swaggerUi.serve);
+
+routes.get(
+  '/docs',
+  swaggerUi.setup(specs, {
+    customCss: '.swagger-ui .topbar { display: none !important }',
+    customSiteTitle: 'TodoList | Documentation',
+  }),
+);
 
 routes.post('/user-management/register', validateUserStore, UserController.store);
 
@@ -49,50 +65,61 @@ routes.post(
   PasswordController.update,
 );
 
-// Protected routes
-
-routes.put('/user-management/refresh', SessionController.update);
-
 routes.put(
-  '/user-management/edit',
-  passport.authenticate('jwt', { session: false }),
+  '/user-management/edit-account',
+  passport.authenticate(...jwtConfig),
+  validateUserUpdate,
+  UserController.update,
+);
+
+routes.delete(
+  '/user-management/delete-account',
+  passport.authenticate(...jwtConfig),
   validateUserUpdate,
   UserController.update,
 );
 
 routes.post(
-  '/projects/new',
+  '/my-projects/create-project',
   validateProjectStore,
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate(...jwtConfig),
   ProjectController.store,
 );
+
 routes.get(
-  '/projects',
-  passport.authenticate('jwt', { session: false }),
+  '/my-projects/all-projects',
+  passport.authenticate(...jwtConfig),
   validateProjectIndex,
   ProjectController.index,
 );
+
 routes.get(
-  '/projects/:projectId',
-  passport.authenticate('jwt', { session: false }),
+  '/my-projects/:projectId/tasks',
+  passport.authenticate(...jwtConfig),
   ProjectController.show,
 );
 routes.put(
-  '/projects/:projectId/edit',
+  '/my-projects/:projectId/edit',
   validateProjectUpdate,
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate(...jwtConfig),
   ProjectController.update,
 );
 routes.delete(
-  '/projects/:projectId/delete',
-  passport.authenticate('jwt', { session: false }),
+  '/my-projects/:projectId/delete',
+  passport.authenticate(...jwtConfig),
   ProjectController.delete,
 );
 
 routes.put(
-  '/projects/task',
-  passport.authenticate('jwt', { session: false }),
+  '/projects/:projectId/tasks/:taskId/edit',
+  passport.authenticate(...jwtConfig),
   TaskController.update,
+);
+
+routes.delete(
+  '/projects/:projectId/tasks/:taskId/delete',
+  passport.authenticate(...jwtConfig),
+  TaskController.delete,
 );
 
 routes.use(errorMiddleware);

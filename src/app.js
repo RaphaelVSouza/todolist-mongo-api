@@ -9,6 +9,7 @@ import morgan from 'morgan';
 
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
+
 import applyPassportStrategy from './app/middlewares/auth.js';
 
 import routes from './routes.js';
@@ -19,6 +20,7 @@ import limiterConfig from './config/limiter.js';
 import './database/mongo.js';
 
 const limiter = rateLimit(limiterConfig);
+
 class App {
   constructor() {
     this.server = express();
