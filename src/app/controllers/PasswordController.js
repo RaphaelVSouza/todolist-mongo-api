@@ -14,7 +14,7 @@ class PasswordController {
 
     if (!user) return res.status(404).send({ error: 'User not found' });
 
-    if (!user.verifiedEmail) return res.status(401).send({ error: 'Email must be verified first' });
+    if (!user.isVerified) return res.status(401).send({ error: 'Email must be verified first' });
 
     const resetToken = crypto.randomBytes(20).toString('hex');
 
@@ -33,6 +33,10 @@ class PasswordController {
     );
 
     await Queue.add(ChangePassMail.key, { email, apiUrl, resetToken });
+
+    if (process.env.NODE_ENV !== 'production') {
+      return res.json({ message: `Here is your reset token: ${resetToken}` });
+    }
 
     return res.json({ message: 'Email successfully sent' });
   }

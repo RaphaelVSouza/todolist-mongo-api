@@ -66,6 +66,8 @@ class ProjectController {
       .populate('tasks')
       .populate({ path: 'user', select: 'name' });
 
+    if (!project) return res.status(404).send({ error: 'Project not found' });
+
     return res.json(project);
   }
 
@@ -123,7 +125,10 @@ class ProjectController {
 
     if (!projectId) return res.status(400).send({ error: 'ProjectId must be passed' });
 
-    await Project.findByIdAndDelete(projectId, { useFindAndModify: false }).populate('user');
+    const isDeleted = await Project.deleteOne({ _id: projectId });
+
+    if (isDeleted.ok !== 1) return res.status(404).send({ error: 'Project not found' });
+
     return res.send({ message: 'Project removed' });
   }
 }
