@@ -9,22 +9,24 @@ class UserController {
 
     const user = await User.create(req.body);
 
-    const { id, name } = user;
+    const { id } = user;
 
-    await UserMailController.sendConfirmationMail(id, email);
+    const { verifyToken } = await UserMailController.sendConfirmationMail(id, email);
 
+    if (process.env.NODE_ENV !== 'production') {
+      return res.json({
+        message: `Here is your verify token: ${verifyToken}`,
+      });
+    }
     return res.json({
-      id,
-      name,
-      email,
-      message: `A verify email is beign sent to ${email}`,
+      message: `A verify email is sent to ${email}`,
     });
   }
 
   async update(req, res) {
     const { userId } = req.user;
 
-    if (!userId) return res.status(401).send({ error: 'You must be logged in to see your projects' });
+    if (!userId) return res.status(401).send({ error: 'You must be logged in' });
 
     const { email, oldPassword } = req.body;
 
@@ -47,6 +49,20 @@ class UserController {
     await user.updateOne(req.body);
 
     return res.json({ id: userId, message: 'Data is successfully alterated' });
+  }
+
+  async delete(req, res) {
+    const { userId } = req.user;
+
+    if (!userId) return res.status(401).send({ error: 'You must be logged in' });
+
+    const user = await User.findById(userId).select('+password');
+
+    const isDeleted = await User.deleteOne({ _id: user.id });
+
+    if (isDeleted.ok !== 1) return res.status(500).send({ error: 'Internal error on delete user' });
+
+    return res.json({ message: 'User is successfully deleted' });
   }
 }
 
