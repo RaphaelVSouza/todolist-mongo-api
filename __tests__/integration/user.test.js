@@ -1,12 +1,8 @@
-import mongoose from 'mongoose';
-import request from 'supertest';
 import {
   describe, it, expect, beforeAll,
 } from '@jest/globals';
 import User from '../../src/app/schemas/Users.js';
 import factory from '../factories/factory';
-import app from '../../src/app';
-import truncate from '../utils/truncate';
 import Mongo from '../../src/database/mongo';
 
 let user = {};
@@ -17,7 +13,7 @@ describe('MongoDB Test Suite', () => {
 
   it('0 - Should connect to the database', async () => {
     const connectionState = await Mongo.isConnected();
-  console.log('State', connectionState)
+
     expect(connectionState).toBe('Connected');
   });
 
@@ -36,24 +32,23 @@ describe('MongoDB Test Suite', () => {
   it('3 - Should update a User from database', async () => {
     const query = { email: user.email };
     const update = { name: 'A New Name' };
-    
+
     const isUpdated = await User.updateOne(query, update);
 
-    expect(isUpdated.nModified && isUpdated.ok).toBe(1)
+    expect(isUpdated.nModified && isUpdated.ok).toBe(1);
   });
 
   it('4 - Should delete a User from database', async () => {
     const query = { email: user.email };
     const isDeleted = await User.deleteOne(query);
 
-    expect(isDeleted.ok).toBe(1)
-  })
+    expect(isDeleted.ok).toBe(1);
+  });
 
   it('5 - Should close Database connection', async () => {
     await Mongo.close();
     const connectionState = await Mongo.isConnected();
 
-    expect(connectionState).toBe('Disconnected')
+    expect(connectionState).toBe('Disconnected');
   });
-
 });
