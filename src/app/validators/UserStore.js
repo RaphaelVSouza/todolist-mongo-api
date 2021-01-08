@@ -8,7 +8,7 @@ export default async (req, res, next) => {
         .required(),
       password: Yup.string().min(3).max(100).required(),
       confirmPassword: Yup.string().when('password', {
-        is: (password) => (!!(password && password.length > 0)),
+        is: (password) => !!(password && password.length > 0),
         then: Yup.string()
           .required()
           .oneOf([Yup.ref('password')]),
@@ -18,7 +18,8 @@ export default async (req, res, next) => {
     await validationSchema.validateSync(req.body, { abortEarly: false });
 
     return next();
-  } catch (err) {
-    return res.status(400).json({ error: 'Validation fails', messages: err.inner });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({ error: 'Validation fails', messages: error.inner });
   }
 };

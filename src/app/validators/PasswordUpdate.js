@@ -9,7 +9,7 @@ export default async (req, res, next) => {
       confirmPassword: Yup.string()
         .required()
         .when('password', {
-          is: (password) => (!!(password && password.length > 0)),
+          is: (password) => !!(password && password.length > 0),
           then: Yup.string().oneOf([Yup.ref('password')]),
         }),
     });
