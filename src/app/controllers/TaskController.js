@@ -4,18 +4,21 @@ import Project from '../schemas/Projects';
 class TaskController {
   async update(req, res) {
     const { userId } = req.user;
-
-    if (!userId) return res.status(401).send({ error: 'You must be logged in to see your projects' });
-
     const { projectId, taskId } = req.params;
 
-    if (!projectId) return res.status(400).send({ error: 'projectId must be suplied' });
+    if (!userId) return res.boom.unauthorized('Need to login');
 
-    if (!taskId) return res.status(400).send({ error: 'TaskId must be suplied' });
+    if (!projectId) return res.boom.badRequest('ProjectId must be passed.');
+
+    const project = await Project.findById(projectId);
+
+    if (!project) return res.boom.notFound('Project not found.');
+
+    if (!taskId) return res.boom.badRequest('TaskId must be passed.');
 
     const task = await Task.findById(taskId);
 
-    if (!task) return res.status(404).send({ error: 'Task not found' });
+    if (!task) return res.boom.notFound('Task not found.');
 
     task.completed ? (task.completed = false) : (task.completed = true);
 
@@ -27,27 +30,23 @@ class TaskController {
   async delete(req, res) {
     const { userId } = req.user;
 
-    if (!userId) return res.status(401).send({ error: 'You must be logged in to see your projects' });
+    if (!userId) return res.boom.unauthorized('Need to login');
 
     const { projectId, taskId } = req.params;
 
-    if (!projectId) return res.status(400).send({ error: 'projectId must be suplied' });
+    if (!projectId) return res.boom.badRequest('ProjectId must be passed.');
 
     const project = await Project.findById(projectId);
 
-    if (!project) return res.status(404).send({ error: 'Project not found' });
+    if (!project) return res.boom.notFound('Project not found.');
 
-    if (!taskId) return res.status(400).send({ error: 'TaskId must be suplied' });
+    if (!taskId) return res.boom.badRequest('TaskId must be passed.');
 
-    const task = await Task.findById(taskId);
+    const deleted = await Task.deleteOne({ _id: taskId });
 
-    if (!task) return res.status(404).send({ error: 'Task not found' });
+    if (!deleted.ok !== 1) return res.boom.notFound('Task not found.');
 
-    task.completed ? (task.completed = false) : (task.completed = true);
-
-    task.save();
-
-    return res.json(task);
+    return res.json({ message: 'Task Successfully removed' });
   }
 }
 

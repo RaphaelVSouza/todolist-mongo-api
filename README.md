@@ -76,7 +76,7 @@ npm run dev:queue
 
 ## Testing the API endpoints
 
-Enter on /docs to access the swagger documentation.
+Enter on /docs on your browser to access the swagger documentation.
 
 ## License
 

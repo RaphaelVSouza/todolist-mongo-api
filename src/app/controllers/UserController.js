@@ -5,7 +5,7 @@ class UserController {
   async store(req, res) {
     const { email } = req.body;
 
-    if (await User.findOne({ email })) return res.status(403).send({ error: 'User already exists' });
+    if (await User.findOne({ email })) return res.boom.conflict('User already exists.');
 
     const user = await User.create(req.body);
 
@@ -26,7 +26,7 @@ class UserController {
   async update(req, res) {
     const { userId } = req.user;
 
-    if (!userId) return res.status(401).send({ error: 'You must be logged in' });
+    if (!userId) return res.boom.unauthorized('Need to login first.');
 
     const { email, oldPassword } = req.body;
 
@@ -37,13 +37,13 @@ class UserController {
         where: { email },
       });
       if (userExists) {
-        return res.status(403).send({ error: 'User already exists.' });
+        return res.boom.conflict('User already exists.');
       }
       UserMailController.sendConfirmationMail(userId, email);
       req.body.isVerified = false;
     }
     if (oldPassword) {
-      if (!(await user.comparePassword(oldPassword, user.password))) return res.status(401).send({ error: 'Password does not match.' });
+      if (!(await user.comparePassword(oldPassword, user.password))) return res.boom.unauthorized('Invalid password.');
     }
 
     await user.updateOne(req.body);
@@ -54,13 +54,13 @@ class UserController {
   async delete(req, res) {
     const { userId } = req.user;
 
-    if (!userId) return res.status(401).send({ error: 'You must be logged in' });
+    if (!userId) return res.boom.unauthorized('Need to login first.');
 
     const user = await User.findById(userId).select('+password');
 
-    const isDeleted = await User.deleteOne({ _id: user.id });
+    const deleted = await User.deleteOne({ _id: user.id });
 
-    if (isDeleted.ok !== 1) return res.status(500).send({ error: 'Internal error on delete user' });
+    if (deleted.ok !== 1) return res.boom.forbidden('Error on delete user. Try again later.');
 
     return res.json({ message: 'User is successfully deleted' });
   }

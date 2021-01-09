@@ -12,9 +12,9 @@ class PasswordController {
 
     const user = await User.findOne({ email });
 
-    if (!user) return res.status(404).send({ error: 'User not found' });
+    if (!user) return res.boom.notFound('User not found.');
 
-    if (!user.isVerified) return res.status(401).send({ error: 'Email must be verified first' });
+    if (!user.isVerified) return res.boom.forbidden('Need to verify email first.');
 
     const resetToken = crypto.randomBytes(20).toString('hex');
 
@@ -38,7 +38,7 @@ class PasswordController {
       return res.json({ message: `Here is your reset token: ${resetToken}` });
     }
 
-    return res.json({ message: 'Email successfully sent' });
+    return res.json({ message: 'Email successfully sent!' });
   }
 
   async update(req, res) {
@@ -49,19 +49,19 @@ class PasswordController {
       '+passwordResetToken +passwordResetExpires',
     );
 
-    if (!user) return res.status(404).send({ error: 'User not found' });
+    if (!user) return res.boom.notFound('User not found.');
 
-    if (resetToken != user.passwordResetToken) return res.status(401).send({ error: 'Token invalid' });
+    if (resetToken != user.passwordResetToken) return res.boom.unauthorized('Invalid token.');
 
     const now = new Date();
 
-    if (now > user.passwordResetExpires) return res.status(401).json({ error: 'Token expired, generate a new one' });
+    if (now > user.passwordResetExpires) return res.boom.forbidden('Expired token, generate a new one.');
 
     user.password = password;
 
     await user.save();
 
-    return res.json({ message: 'Password changed successfully' });
+    return res.json({ message: 'Password changed successfully!' });
   }
 }
 

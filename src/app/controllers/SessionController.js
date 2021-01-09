@@ -7,11 +7,11 @@ class SessionController {
 
     const user = await User.findOne({ email }).select('id name +password isVerified');
 
-    if (!user) return res.status(404).send({ error: 'User or password invalid' });
+    if (!user) return res.boom.unauthorized('User or password invalid.');
 
-    if (!user.isVerified) return res.status(401).send({ error: 'Need to verify email first' });
+    if (!user.isVerified) return res.boom.unauthorized('Need to verify email first.');
 
-    if (!(await bcrypt.compare(password, user.password))) return res.status(401).send({ error: 'User or password invalid' });
+    if (!(await bcrypt.compare(password, user.password))) return res.boom.unauthorized('User or password invalid.');
 
     const { id, name } = user;
 

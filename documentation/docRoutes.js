@@ -231,6 +231,12 @@ const routes = {
       operationId: 'readProjects',
       parameters: [
         {
+          name: 'title',
+          description: 'search project by title',
+          in: 'query',
+          type: 'string',
+        },
+        {
           name: 'skip',
           description: '',
           in: 'query',
@@ -336,7 +342,7 @@ const routes = {
     put: {
       tags: ['Tasks'],
       produces: ['application/json'],
-      description: 'Update task',
+      description: 'Update task to completed or uncompleted',
       operationId: 'updateTask',
       parameters: [
         {
@@ -372,8 +378,8 @@ const routes = {
     delete: {
       tags: ['Tasks'],
       produces: ['application/json'],
-      description: 'Update Project and Tasks',
-      operationId: 'updateProject',
+      description: 'Delete task',
+      operationId: 'deleteTask',
       parameters: [
         {
           name: 'projectId',

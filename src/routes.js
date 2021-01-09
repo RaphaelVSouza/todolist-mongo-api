@@ -76,7 +76,7 @@ routes.delete(
   '/user-management/delete-account',
   passport.authenticate(...jwtConfig),
   validateUserUpdate,
-  UserController.update,
+  UserController.delete,
 );
 
 routes.post(

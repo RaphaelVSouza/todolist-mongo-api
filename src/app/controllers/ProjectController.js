@@ -5,7 +5,7 @@ class ProjectController {
   async store(req, res) {
     const { userId } = req.user;
 
-    if (!userId) return res.status(401).send({ error: 'You must be logged in to see your projects' });
+    if (!userId) return res.boom.unauthorized('Need to login first.');
 
     let { title, description, tasks } = req.body;
 
@@ -46,27 +46,32 @@ class ProjectController {
 
     const query = title ? { title: { $regex: `.*${title}*.` } } : null;
 
-    if (!userId) return res.status(401).send({ error: 'You must be logged in to see your projects' });
+    if (!userId) return res.boom.unauthorized('Need to login first.');
 
     const projects = await Project.find({ user: userId, query })
       .skip(parseInt(skip))
       .limit(parseInt(limit))
+      .select('-_id title')
       .populate('tasks')
       .populate({ path: 'user', select: 'name' });
 
-    return res.json({ projects });
+    return res.json(projects);
   }
 
   async show(req, res) {
+    const { userId } = req.user;
+
+    if (!userId) return res.boom.unauthorized('Need to login first.');
+
     const { projectId } = req.params;
 
-    if (!projectId) return res.status(400).send({ error: 'ProjectId must be passed' });
+    if (!projectId) return res.boom.badRequest('ProjectId must be passed.');
 
-    const project = await Project.findById()
+    const project = await Project.findById(projectId)
       .populate('tasks')
       .populate({ path: 'user', select: 'name' });
 
-    if (!project) return res.status(404).send({ error: 'Project not found' });
+    if (!project) return res.boom.notFound('Project not found');
 
     return res.json(project);
   }
@@ -74,7 +79,7 @@ class ProjectController {
   async update(req, res) {
     const { userId } = req.user;
 
-    if (!userId) return res.status(401).send({ error: 'You must be logged in to see your projects' });
+    if (!userId) return res.boom.unauthorized('Need to login to update a project.');
 
     let { title, description, tasks } = req.body;
 
@@ -121,13 +126,13 @@ class ProjectController {
     const { projectId } = req.params;
     const { userId } = req.user;
 
-    if (!userId) return res.status(401).send({ error: 'You must be logged in to see your projects' });
+    if (!userId) return res.boom.unauthorized('Need to login to delete a project.');
 
-    if (!projectId) return res.status(400).send({ error: 'ProjectId must be passed' });
+    if (!projectId) return res.boom.badRequest('ProjectId must be passed.');
 
-    const isDeleted = await Project.deleteOne({ _id: projectId });
+    const deleted = await Project.deleteOne({ _id: projectId });
 
-    if (isDeleted.ok !== 1) return res.status(404).send({ error: 'Project not found' });
+    if (deleted.ok !== 1) return res.boom.notFound('Project not found.');
 
     return res.send({ message: 'Project removed' });
   }

@@ -6,6 +6,7 @@ import passport from 'passport';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
+import boom from 'express-boom';
 
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
@@ -32,6 +33,7 @@ class App {
   middlewares() {
     this.server.use(express.json());
     this.server.use(express.urlencoded({ extended: false }));
+    this.server.use(boom());
 
     applyPassportStrategy(passport);
 
