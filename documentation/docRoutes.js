@@ -3,17 +3,16 @@ const routes = {
     post: {
       tags: ['User Management - Register/Session'],
       produces: ['application/json'],
-      description: 'register',
-      operationId: 'createUser',
+      description: 'Register user',
+      operationId: 'registerUser',
       requestBody: {
         content: {
-          'application/json': {
+          'multipart/form-data': {
             schema: {
-              $ref: '#/components/schemas/User',
+              $ref: '#/components/schemas/RegisterUpdate',
             },
           },
         },
-        required: true,
       },
       responses: {
         200: {
@@ -21,6 +20,9 @@ const routes = {
         },
         400: {
           description: 'Bad Request',
+        },
+        401: {
+          description: 'Unauthorized',
         },
         403: {
           description: 'User already exists',
@@ -48,6 +50,35 @@ const routes = {
         },
       },
       security: [],
+    },
+  },
+  avatar_delete: {
+    delete: {
+      tags: ['User Management - Avatar'],
+      description: 'Delete Avatar',
+      operationId: 'deleteAvatar',
+      parameters: [
+        {
+          name: 'avatarId',
+          description: '',
+          in: 'path',
+          required: true,
+        },
+      ],
+      responses: {
+        200: {
+          description: 'Avatar Successfully deleted',
+        },
+        400: {
+          description: 'Bad Request',
+        },
+        401: {
+          description: 'Unauthorized',
+        },
+        403: {
+          description: 'User already exists',
+        },
+      },
     },
   },
   login: {
@@ -152,21 +183,20 @@ const routes = {
   user_update: {
     put: {
       tags: ['User Management - Edit/Delete'],
-      produces: ['application/json'],
       description: 'Edit user',
       operationId: 'updateUser',
       requestBody: {
         content: {
-          'application/json': {
+          'multipart/form-data': {
             schema: {
-              $ref: '#/components/schemas/User',
+              $ref: '#/components/schemas/RegisterUpdate',
             },
           },
         },
       },
       responses: {
         200: {
-          description: 'User Successfully created',
+          description: 'User Successfully updated',
         },
         400: {
           description: 'Bad Request',

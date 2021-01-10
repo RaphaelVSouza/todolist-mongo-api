@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import authConfig from '../../config/auth';
+import Avatar from './Avatar';
+import Project from './Projects';
 
 const UserSchema = new mongoose.Schema(
   {
@@ -47,11 +49,23 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
+UserSchema.pre('remove', async function (next) {
+  const avatar = await Avatar.findOne({ user_id: this._id });
+
+  if (avatar) await avatar.remove().promise();
+
+  await Project.deleteMany({ user_id: this._id });
+
+  next();
+});
+
 UserSchema.methods.generateAccessToken = function (params = {}) {
   return jwt.sign(params, authConfig.secret, { expiresIn: '2d' });
 };
 
-UserSchema.methods.comparePassword = (password, dbpassword) => bcrypt.compare(password, dbpassword);
+UserSchema.methods.comparePassword = function (password) {
+  return bcrypt.compare(password, this.password);
+};
 
 const User = mongoose.model('User', UserSchema);
 

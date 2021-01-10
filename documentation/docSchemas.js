@@ -20,6 +20,32 @@ const schemas = {
       },
     },
   },
+  RegisterUpdate: {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        example: 'John Doe',
+      },
+      email: {
+        type: 'string',
+        example: 'john.doe25@email.com',
+      },
+      password: {
+        type: 'string',
+        example: 'mysupersecretpassword123',
+      },
+      confirmPassword: {
+        type: 'string',
+        example: 'mysupersecretpassword123',
+      },
+
+      file: {
+        type: 'string',
+        format: 'binary',
+      },
+    },
+  },
 
   Login: {
     type: 'object',

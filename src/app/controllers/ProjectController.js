@@ -13,7 +13,7 @@ class ProjectController {
 
     if (!description) description = null;
 
-    const project = await Project.create({ title, description, user: userId });
+    const project = await Project.create({ title, description, user_id: userId });
 
     /**
          * Handle and wait all tasks to be saved at project
@@ -25,7 +25,7 @@ class ProjectController {
           if (task.hasOwnProperty('title')) {
             if (!task.title) task.title = 'No title';
 
-            const projectTask = new Task({ title: task.title, project: project._id });
+            const projectTask = new Task({ title: task.title, project_id: project._id });
 
             await projectTask.save();
 
@@ -48,12 +48,12 @@ class ProjectController {
 
     if (!userId) return res.boom.unauthorized('Need to login first.');
 
-    const projects = await Project.find({ user: userId, query })
+    const projects = await Project.find({ user_id: userId, query })
       .skip(parseInt(skip))
       .limit(parseInt(limit))
-      .select('-_id title')
+      .populate({ path: 'user', select: 'name' })
       .populate('tasks')
-      .populate({ path: 'user', select: 'name' });
+      .select('_id title description');
 
     return res.json(projects);
   }
@@ -101,7 +101,7 @@ class ProjectController {
          */
     project.tasks = [];
 
-    await Task.deleteMany({ project: project._id });
+    await Task.deleteMany({ project_id: project._id });
 
     /**
          * Handle and wait all tasks to be saved in project
@@ -109,7 +109,7 @@ class ProjectController {
 
     await Promise.all(
       tasks.map(async (task) => {
-        const projectTask = new Task({ ...task, project: project._id });
+        const projectTask = new Task({ ...task, project_id: project._id });
 
         await projectTask.save();
 
@@ -130,9 +130,11 @@ class ProjectController {
 
     if (!projectId) return res.boom.badRequest('ProjectId must be passed.');
 
-    const deleted = await Project.deleteOne({ _id: projectId });
+    const project = await Project.findById(projectId);
 
-    if (deleted.ok !== 1) return res.boom.notFound('Project not found.');
+    if (!project) return res.boom.notFound('Project not found.');
+
+    await project.remove();
 
     return res.send({ message: 'Project removed' });
   }

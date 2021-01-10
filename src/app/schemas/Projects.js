@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Task from './Tasks';
 
 const ProjectSchema = new mongoose.Schema({
   title: {
@@ -8,7 +9,7 @@ const ProjectSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  user: {
+  user_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
@@ -18,6 +19,12 @@ const ProjectSchema = new mongoose.Schema({
       ref: 'Task',
     },
   ],
+});
+
+ProjectSchema.pre('remove', async function (next) {
+  await Task.deleteMany({ project_id: this._id });
+
+  next();
 });
 
 const Project = mongoose.model('Project', ProjectSchema);

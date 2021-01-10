@@ -4,7 +4,7 @@ import Queue from '../../lib/queue.js';
 import VerifyMail from '../jobs/VerifyMail.js';
 import UserMail from '../schemas/UserMails';
 
-const apiUrl = process.env.SERVER_URL;
+const apiUrl = `${process.env.SERVER_HOST}${process.env.PORT}`;
 
 class UserMailController {
   async sendConfirmationMail(id, email) {

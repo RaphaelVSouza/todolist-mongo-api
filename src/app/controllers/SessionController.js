@@ -1,5 +1,5 @@
-import bcrypt from 'bcryptjs';
 import User from '../schemas/Users.js';
+import Avatar from '../schemas/Avatar';
 
 class SessionController {
   async store(req, res) {
@@ -11,15 +11,20 @@ class SessionController {
 
     if (!user.isVerified) return res.boom.unauthorized('Need to verify email first.');
 
-    if (!(await bcrypt.compare(password, user.password))) return res.boom.unauthorized('User or password invalid.');
+    if (!(await user.comparePassword(password))) return res.boom.unauthorized('User or password invalid.');
 
     const { id, name } = user;
+
+    let avatar = await Avatar.findOne({ user_id: user.id });
+
+    if (!avatar) avatar = null;
 
     return res.json({
       id,
       name,
       email,
       accessToken: user.generateAccessToken({ id: user.id }),
+      avatar,
     });
   }
 }

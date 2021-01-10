@@ -1,17 +1,18 @@
 import * as Yup from 'yup';
 
 export default async (req, res, next) => {
+  console.log(req.file);
   try {
     const validationSchema = Yup.object().shape({
-      name: Yup.string().min(3).max(100),
-      email: Yup.string().email().min(3).max(100),
-      oldPassword: Yup.string().min(3).max(100),
+      name: Yup.string().max(100),
+      email: Yup.string().email().max(100),
+      oldPassword: Yup.string().max(100),
       password: Yup.string().when('oldPassword', {
-        is: (oldPassword) => (!!(oldPassword && oldPassword.length > 0)),
+        is: (oldPassword) => !!(oldPassword && oldPassword.length > 0),
         then: Yup.string().required(),
       }),
       confirmPassword: Yup.string().when('password', {
-        is: (password) => (!!(password && password.length > 0)),
+        is: (password) => !!(password && password.length > 0),
         then: Yup.string()
           .required()
           .oneOf([Yup.ref('password')]),

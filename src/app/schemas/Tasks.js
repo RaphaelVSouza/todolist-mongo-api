@@ -5,14 +5,10 @@ const TaskSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  project: {
+  project_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Project',
     required: true,
-  },
-  assignedTo: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
   },
   completed: {
     type: Boolean,

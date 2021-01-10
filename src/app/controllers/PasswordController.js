@@ -42,10 +42,10 @@ class PasswordController {
   }
 
   async update(req, res) {
-    const { email, password } = req.body;
+    const { password } = req.body;
     const { resetToken } = req.params;
 
-    const user = await User.findOne({ email }).select(
+    const user = await User.findOne({ passwordResetToken: resetToken }).select(
       '+passwordResetToken +passwordResetExpires',
     );
 

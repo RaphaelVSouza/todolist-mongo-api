@@ -5,8 +5,10 @@ import RedisStore from 'express-brute-redis';
 import passport from 'passport';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocs from 'swagger-jsdoc';
+import multer from 'multer';
 
 import UserController from './app/controllers/UserController';
+import AvatarController from './app/controllers/AvatarController';
 import SessionController from './app/controllers/SessionController';
 import PasswordController from './app/controllers/PasswordController';
 import ProjectController from './app/controllers/ProjectController';
@@ -23,6 +25,7 @@ import validateProjectUpdate from './app/validators/ProjectUpdate';
 import validateProjectIndex from './app/validators/ProjectIndex';
 
 import redisConfig from './config/redis';
+import multerConfig from './config/multer';
 import swaggerOptions from '../documentation/docSwagger';
 import { retries } from './config/brute';
 import errorMiddleware from './app/middlewares/error';
@@ -47,7 +50,12 @@ routes.get(
   }),
 );
 
-routes.post('/user-management/register', validateUserStore, UserController.store);
+routes.post(
+  '/user-management/register',
+  multer(multerConfig).single('file'),
+  validateUserStore,
+  UserController.store,
+);
 
 routes.post(
   '/user-management/login',
@@ -56,11 +64,17 @@ routes.post(
   SessionController.store,
 );
 
-routes.get('/user-management/verify_email/:verifyToken', UserMailController.verifyEmail);
+routes.delete(
+  '/:avatarId/deletePhoto',
+  passport.authenticate(...jwtConfig),
+  AvatarController.delete,
+);
 
-routes.post('/user-management/forgot_password', validatePasswordStore, PasswordController.store);
+routes.get('/user-management/verify-email/:verifyToken', UserMailController.verifyEmail);
+
+routes.post('/user-management/forgot-password', validatePasswordStore, PasswordController.store);
 routes.post(
-  '/user-management/reset_password/:resetToken',
+  '/user-management/reset-password/:resetToken',
   validatePasswordUpdate,
   PasswordController.update,
 );
@@ -68,6 +82,7 @@ routes.post(
 routes.put(
   '/user-management/edit-account',
   passport.authenticate(...jwtConfig),
+  multer(multerConfig).single('file'),
   validateUserUpdate,
   UserController.update,
 );

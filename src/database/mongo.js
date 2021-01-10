@@ -17,7 +17,7 @@ class Mongodb {
       useCreateIndex: true,
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useFindAndModify: true,
+      useFindAndModify: false,
     };
 
     Mongoose.connect(connectionUrl, mongooseOptions).catch((reject) => console.log(reject));

@@ -11,6 +11,7 @@ import boom from 'express-boom';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 
+import { resolve } from 'path';
 import applyPassportStrategy from './app/middlewares/auth.js';
 
 import routes from './routes.js';
@@ -25,7 +26,7 @@ const limiter = rateLimit(limiterConfig);
 class App {
   constructor() {
     this.server = express();
-    this.sentry();
+    this.sentry(); // Comment this if you don't want to use sentry
     this.middlewares();
     this.routes();
   }
@@ -34,6 +35,7 @@ class App {
     this.server.use(express.json());
     this.server.use(express.urlencoded({ extended: false }));
     this.server.use(boom());
+    this.server.use('/files', express.static(resolve(__dirname, '..', 'tmp', 'uploads')));
 
     applyPassportStrategy(passport);
 

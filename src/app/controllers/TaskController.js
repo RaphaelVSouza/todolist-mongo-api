@@ -42,9 +42,11 @@ class TaskController {
 
     if (!taskId) return res.boom.badRequest('TaskId must be passed.');
 
-    const deleted = await Task.deleteOne({ _id: taskId });
+    const task = await Task.findById(taskId);
 
-    if (!deleted.ok !== 1) return res.boom.notFound('Task not found.');
+    if (!task) return res.boom.notFound('Task not found.');
+
+    await task.remove();
 
     return res.json({ message: 'Task Successfully removed' });
   }

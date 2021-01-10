@@ -34,7 +34,7 @@ const config = {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
+        url: `http://localhost:${process.env.PORT}`,
         description: 'Local Server',
       },
     ],
@@ -49,15 +49,19 @@ const config = {
         name: 'User Management - Edit/Delete',
       },
       {
+        name: 'User Management - Avatar',
+      },
+      {
         name: 'Projects',
       },
     ],
     paths: {
       '/user-management/register': routes.register,
       '/user-management/login': routes.login,
-      '/user-management/verify_email/{verifyToken}': routes.verify_email,
-      '/user-management/forgot_password': routes.forgot_password,
-      '/user-management/reset_password/{resetToken}': routes.reset_password,
+      '/{avatarId}/deletePhoto': routes.avatar_delete,
+      '/user-management/verify-email/{verifyToken}': routes.verify_email,
+      '/user-management/forgot-password': routes.forgot_password,
+      '/user-management/reset-password/{resetToken}': routes.reset_password,
       '/user-management/edit-account': routes.user_update,
       '/user-management/delete-account': routes.user_delete,
       '/my-projects/create-project': routes.project_create,
