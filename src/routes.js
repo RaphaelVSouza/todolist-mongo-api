@@ -68,7 +68,7 @@ routes.delete(
 routes.get('/verify-email/:verifyToken', UserMailController.verifyEmail);
 
 routes.post('/forgot-password', validatePasswordStore, PasswordController.store);
-routes.post('/reset-password/:resetToken', validatePasswordUpdate, PasswordController.update);
+routes.put('/reset-password/:resetToken', validatePasswordUpdate, PasswordController.update);
 
 routes.put(
   '/user-management/edit-account',

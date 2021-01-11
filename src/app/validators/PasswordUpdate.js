@@ -3,8 +3,6 @@ import * as Yup from 'yup';
 export default async (req, res, next) => {
   try {
     const validationSchema = Yup.object().shape({
-      email: Yup.string().email().min(3).max(100)
-        .required(),
       password: Yup.string().min(3).max(100).required(),
       confirmPassword: Yup.string()
         .required()

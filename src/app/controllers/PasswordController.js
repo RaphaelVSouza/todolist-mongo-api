@@ -4,7 +4,7 @@ import User from '../schemas/Users.js';
 import Queue from '../../lib/queue.js';
 import ChangePassMail from '../jobs/ChangePassMail.js';
 
-const apiUrl = process.env.SERVER_URL;
+const frontUrl = process.env.FRONT_URL;
 
 class PasswordController {
   async store(req, res) {
@@ -32,10 +32,10 @@ class PasswordController {
       { useFindAndModify: false },
     );
 
-    await Queue.add(ChangePassMail.key, { email, apiUrl, resetToken });
+    await Queue.add(ChangePassMail.key, { email, frontUrl, resetToken });
 
     if (process.env.NODE_ENV !== 'production') {
-      return res.json({ message: `Here is your reset token: ${resetToken}` });
+      return res.json({ message: `Here is your reset token:${resetToken}` });
     }
 
     return res.json({ message: 'Email successfully sent!' });

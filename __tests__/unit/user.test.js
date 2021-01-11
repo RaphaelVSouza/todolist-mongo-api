@@ -6,7 +6,7 @@ import factory from '../factories/factory';
 import Mongo from '../../src/database/mongo';
 
 let user = {};
-describe('MongoDB Test Suite', () => {
+describe('User Test Suite', () => {
   beforeAll(async () => {
     user = await factory.attrs('User');
   });

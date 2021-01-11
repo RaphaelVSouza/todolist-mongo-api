@@ -145,7 +145,7 @@ const routes = {
     },
   },
   reset_password: {
-    post: {
+    put: {
       tags: ['Password'],
       produces: ['application/json'],
       description: 'Reset password',

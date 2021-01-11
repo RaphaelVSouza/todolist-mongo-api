@@ -11,7 +11,7 @@ let user = {};
 let verifyToken = '';
 let accessToken = '';
 
-describe('MongoDB Test Suite', () => {
+describe('API User Test Suite', () => {
   beforeAll(async () => {
     user = await factory.attrs('User');
   });
