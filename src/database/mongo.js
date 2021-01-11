@@ -1,5 +1,7 @@
 import Mongoose from 'mongoose';
 
+import '../bootstrap';
+
 class Mongodb {
   constructor() {
     this.connect();
@@ -13,6 +15,7 @@ class Mongodb {
 
   connect() {
     const connectionUrl = process.env.MONGO_URL;
+
     const mongooseOptions = {
       useCreateIndex: true,
       useNewUrlParser: true,

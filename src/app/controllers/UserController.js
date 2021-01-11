@@ -29,7 +29,7 @@ class UserController {
 
     if (process.env.NODE_ENV !== 'production') {
       return res.json({
-        message: `Here is your verify token: ${verifyToken}`,
+        message: `Here is your verify token:${verifyToken}`,
       });
     }
     return res.json({
@@ -47,7 +47,7 @@ class UserController {
       size,
       key,
       url,
-    } || null;
+    };
 
     if (!userId) return res.boom.unauthorized('Need to login first.');
 
@@ -69,7 +69,7 @@ class UserController {
 
     let avatar = await Avatar.findOne({ user_id: user._id });
 
-    if (avatar && newAvatar) {
+    if (avatar && newAvatar.key) {
       avatar = new Avatar({ ...newAvatar, user_id: user._id });
       await avatar.save();
     }

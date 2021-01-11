@@ -40,10 +40,10 @@ const config = {
     ],
     tags: [
       {
-        name: 'User Management - Register/Session',
+        name: 'Register/Session',
       },
       {
-        name: 'User Management - Password',
+        name: 'Password',
       },
       {
         name: 'User Management - Edit/Delete',
@@ -56,12 +56,12 @@ const config = {
       },
     ],
     paths: {
-      '/user-management/register': routes.register,
-      '/user-management/login': routes.login,
-      '/{avatarId}/deletePhoto': routes.avatar_delete,
-      '/user-management/verify-email/{verifyToken}': routes.verify_email,
-      '/user-management/forgot-password': routes.forgot_password,
-      '/user-management/reset-password/{resetToken}': routes.reset_password,
+      '/register': routes.register,
+      '/login': routes.login,
+      '/user-management/{avatarId}/deletePhoto': routes.avatar_delete,
+      '/verify-email/{verifyToken}': routes.verify_email,
+      '/forgot-password': routes.forgot_password,
+      '/reset-password/{resetToken}': routes.reset_password,
       '/user-management/edit-account': routes.user_update,
       '/user-management/delete-account': routes.user_delete,
       '/my-projects/create-project': routes.project_create,

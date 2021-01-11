@@ -1,7 +1,6 @@
 import * as Yup from 'yup';
 
 export default async (req, res, next) => {
-  console.log(req.file);
   try {
     const validationSchema = Yup.object().shape({
       name: Yup.string().max(100),

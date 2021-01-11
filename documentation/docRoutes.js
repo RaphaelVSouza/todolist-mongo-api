@@ -1,7 +1,7 @@
 const routes = {
   register: {
     post: {
-      tags: ['User Management - Register/Session'],
+      tags: ['Register/Session'],
       produces: ['application/json'],
       description: 'Register user',
       operationId: 'registerUser',
@@ -33,7 +33,7 @@ const routes = {
   },
   verify_email: {
     get: {
-      tags: ['User Management - Register/Session'],
+      tags: ['Register/Session'],
       description: 'Verify Email to login',
       operationId: 'verifyEmail',
       parameters: [
@@ -83,7 +83,7 @@ const routes = {
   },
   login: {
     post: {
-      tags: ['User Management - Register/Session'],
+      tags: ['Register/Session'],
       produces: ['application/json'],
       description: 'login',
       operationId: 'createSession',
@@ -116,7 +116,7 @@ const routes = {
   },
   forgot_password: {
     post: {
-      tags: ['User Management - Password'],
+      tags: ['Password'],
       produces: ['application/json'],
       description: 'Forgot password',
       operationId: 'forgotPassword',
@@ -146,7 +146,7 @@ const routes = {
   },
   reset_password: {
     post: {
-      tags: ['User Management - Password'],
+      tags: ['Password'],
       produces: ['application/json'],
       description: 'Reset password',
       operationId: 'resetPassword',

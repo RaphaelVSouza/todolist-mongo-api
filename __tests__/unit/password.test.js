@@ -1,5 +1,5 @@
 import {
-  describe, it, expect, beforeAll,
+  describe, it, expect, beforeAll, afterAll,
 } from '@jest/globals';
 import { compare } from 'bcryptjs';
 import User from '../../src/app/schemas/Users.js';
@@ -7,10 +7,19 @@ import factory from '../factories/factory';
 import Mongo from '../../src/database/mongo';
 
 let user = {};
+let createdUser = {};
 
 describe('User Password Test Suite', () => {
   beforeAll(async () => {
     user = await factory.attrs('User');
+    createdUser = await User.create(user);
+  });
+
+  afterAll(async () => {
+    await createdUser.remove();
+
+    await Mongo.close();
+    await Mongo.isConnected();
   });
 
   it('0 - Should connect to the database', async () => {
@@ -20,7 +29,7 @@ describe('User Password Test Suite', () => {
   });
 
   it('1 - Should be able to encrypt password', async () => {
-    const { password } = await User.create(user);
+    const { password } = createdUser;
 
     const isHashed = password.startsWith('$2a$10$');
     expect(isHashed).toBe(true);
@@ -32,12 +41,5 @@ describe('User Password Test Suite', () => {
     const isMatched = await compare(user.password, findUser.password);
 
     expect(isMatched).toBe(true);
-  });
-
-  it('3 - Should close Database connection', async () => {
-    await Mongo.close();
-    const connectionState = await Mongo.isConnected();
-
-    expect(connectionState).toBe('Disconnected');
   });
 });

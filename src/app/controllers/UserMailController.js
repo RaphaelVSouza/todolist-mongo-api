@@ -13,15 +13,18 @@ class UserMailController {
     const now = new Date();
     now.setHours(now.getHours() + 1);
 
-    const userMail = new UserMail({
-      verifyEmailToken: verifyToken,
-      verifyEmailExpires: now,
-      user: id,
-    });
-
-    await userMail.save();
+    await UserMail.updateOne(
+      { user_id: id },
+      {
+        verifyEmailToken: verifyToken,
+        verifyEmailExpires: now,
+        user_id: id,
+      },
+      { upsert: true },
+    );
 
     await Queue.add(VerifyMail.key, { email, apiUrl, verifyToken });
+
     return { verifyToken };
   }
 
@@ -30,9 +33,9 @@ class UserMailController {
 
     const userMail = await UserMail.findOne({ verifyEmailToken: token });
 
-    if (!token && !userMail.verifyEmailToken) return res.boom.unauthorized('Token invalid.');
+    if (!token || !userMail) return res.boom.unauthorized('Token invalid.');
 
-    const user = await User.findById(userMail.user);
+    const user = await User.findById(userMail.user_id);
 
     if (user.isVerified === true) return res.boom.forbidden('Email is already verified.');
 

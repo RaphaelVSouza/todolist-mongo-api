@@ -42,7 +42,7 @@ describe('MongoDB Test Suite', () => {
     const query = { email: user.email };
     const isDeleted = await User.deleteOne(query);
 
-    expect(isDeleted.ok).toBe(1);
+    expect(isDeleted.n && isDeleted.ok).toBe(1);
   });
 
   it('5 - Should close Database connection', async () => {

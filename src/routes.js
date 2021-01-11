@@ -51,18 +51,13 @@ routes.get(
 );
 
 routes.post(
-  '/user-management/register',
+  '/register',
   multer(multerConfig).single('file'),
   validateUserStore,
   UserController.store,
 );
 
-routes.post(
-  '/user-management/login',
-  bruteforce.prevent,
-  validateSessionStore,
-  SessionController.store,
-);
+routes.post('/login', bruteforce.prevent, validateSessionStore, SessionController.store);
 
 routes.delete(
   '/:avatarId/deletePhoto',
@@ -70,14 +65,10 @@ routes.delete(
   AvatarController.delete,
 );
 
-routes.get('/user-management/verify-email/:verifyToken', UserMailController.verifyEmail);
+routes.get('/verify-email/:verifyToken', UserMailController.verifyEmail);
 
-routes.post('/user-management/forgot-password', validatePasswordStore, PasswordController.store);
-routes.post(
-  '/user-management/reset-password/:resetToken',
-  validatePasswordUpdate,
-  PasswordController.update,
-);
+routes.post('/forgot-password', validatePasswordStore, PasswordController.store);
+routes.post('/reset-password/:resetToken', validatePasswordUpdate, PasswordController.update);
 
 routes.put(
   '/user-management/edit-account',

@@ -52,7 +52,7 @@ UserSchema.pre('save', async function (next) {
 UserSchema.pre('remove', async function (next) {
   const avatar = await Avatar.findOne({ user_id: this._id });
 
-  if (avatar) await avatar.remove().promise();
+  if (avatar) await avatar.remove();
 
   await Project.deleteMany({ user_id: this._id });
 
