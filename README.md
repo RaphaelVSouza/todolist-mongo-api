@@ -78,7 +78,7 @@ REDIS_HOST=localhost
 REDIS_PORT=6379
 ```
 
-### Starting our server
+### Starting your server
 
 With the terminal on the root directory of the project, run
 
