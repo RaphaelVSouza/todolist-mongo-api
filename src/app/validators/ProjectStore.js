@@ -11,8 +11,8 @@ export default async (req, res, next) => {
             title: Yup.string(),
           }),
         )
-        .min(1)
-        .max(100),
+        .min(0)
+        .max(50),
     });
 
     await validationSchema.validate(req.body, { abortEarly: false });

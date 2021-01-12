@@ -35,10 +35,10 @@ async function getAccessToken(email, password) {
 describe.only('API Project Test Suite', () => {
   beforeAll(async () => {
     const userAttrs = await factory.attrs('User');
+    userAttrs.isVerified = true;
     user = await factory.create('User', userAttrs);
-    user.isVerified = true;
-    await user.save();
     accessToken = await getAccessToken(userAttrs.email, userAttrs.password);
+    await factory.create('Project');
 
     project = await factory.attrs('Project');
     tasks = await factory.attrsMany('Task', 5);
@@ -69,13 +69,16 @@ describe.only('API Project Test Suite', () => {
     expect(response.body).toHaveProperty('_id');
     expect(response.body.tasks[0]).toHaveProperty('_id');
   });
-  /*
+
   it('2 - Should find a Project from database', async () => {
-    const foundProject = await Project.findById(projectId);
-
-    expect(foundProject._id).toEqual(projectId);
+    const LIMIT = 2;
+    const response = await request(app)
+      .get(`/my-projects/all-projects?limit=${LIMIT}`)
+      .set('Authorization', `Bearer ${accessToken}`);
+    console.log(response.body);
+    expect(response.status).toBe(400);
   });
-
+  /*
   it('3 - Should update a Project from database', async () => {
     const query = { _id: projectId };
     const update = { title: 'A New Title' };

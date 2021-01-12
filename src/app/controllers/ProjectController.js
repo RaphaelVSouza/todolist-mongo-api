@@ -1,5 +1,6 @@
 import Project from '../schemas/Projects.js';
 import Task from '../schemas/Tasks.js';
+import User from '../schemas/Users.js';
 
 class ProjectController {
   async store(req, res) {
@@ -35,8 +36,12 @@ class ProjectController {
       );
       await project.save();
     }
+    const user = await User.findById(userId);
+    console.log(user.projects);
+    user.projects.push(project);
+    await user.save();
 
-    return res.json(project);
+    return res.json({ project });
   }
 
   async index(req, res) {
@@ -48,12 +53,7 @@ class ProjectController {
 
     if (!userId) return res.boom.unauthorized('Need to login first.');
 
-    const projects = await Project.find({ user_id: userId, query })
-      .skip(parseInt(skip))
-      .limit(parseInt(limit))
-      .populate({ path: 'user', select: 'name' })
-      .populate('tasks')
-      .select('_id title description');
+    const projects = await Project.find({ user_id: userId }).populate('tasks');
 
     return res.json(projects);
   }
@@ -67,9 +67,7 @@ class ProjectController {
 
     if (!projectId) return res.boom.badRequest('ProjectId must be passed.');
 
-    const project = await Project.findById(projectId)
-      .populate('tasks')
-      .populate({ path: 'user', select: 'name' });
+    const project = await Project.findById(projectId).populate('tasks');
 
     if (!project) return res.boom.notFound('Project not found');
 
