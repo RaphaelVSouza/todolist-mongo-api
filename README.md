@@ -72,7 +72,7 @@ AWS_DEFAULT_REGION=
 AWS_BUCKET_NAME=
 
 
-SERVER_PORT=3000
+SERVER_PORT=3001
 
 REDIS_HOST=localhost
 REDIS_PORT=6379
@@ -98,7 +98,7 @@ npm run dev:queue
 
 ## Testing the API endpoints
 
-Enter on /docs on your browser to access the swagger documentation.
+Enter on http://localhost:3001/docs on your browser to access the swagger documentation.
 
 ## License
 
