@@ -37,7 +37,7 @@ class ProjectController {
       await project.save();
     }
     const user = await User.findById(userId);
-    console.log(user.projects);
+
     user.projects.push(project);
     await user.save();
 
@@ -47,13 +47,16 @@ class ProjectController {
   async index(req, res) {
     const { userId } = req.user;
 
-    const { title, skip, limit } = req.query;
+    const { title, skip = 0, limit = 10 } = req.query;
 
-    const query = title ? { title: { $regex: `.*${title}*.` } } : null;
+    const query = title
+      ? { $and: [{ user_id: userId }, { title: { $regex: `.*${title}*.` } }] }
+      : { user_id: userId };
 
     if (!userId) return res.boom.unauthorized('Need to login first.');
 
-    const projects = await Project.find({ user_id: userId }).populate('tasks');
+    const projects = await Project.find(query).skip(parseInt(skip)).limit(parseInt(limit));
+    // .populate('tasks');
 
     return res.json(projects);
   }
@@ -97,25 +100,27 @@ class ProjectController {
     /**
          * Deleting tasks to add or modify new ones without duplicate
          */
-    project.tasks = [];
+    if (tasks) {
+      project.tasks = [];
 
-    await Task.deleteMany({ project_id: project._id });
+      await Task.deleteMany({ project_id: project._id });
 
-    /**
-         * Handle and wait all tasks to be saved in project
-         */
+      /**
+             * Handle and wait all tasks to be saved in project
+             */
 
-    await Promise.all(
-      tasks.map(async (task) => {
-        const projectTask = new Task({ ...task, project_id: project._id });
+      await Promise.all(
+        tasks.map(async (task) => {
+          const projectTask = new Task({ ...task, project_id: project._id });
 
-        await projectTask.save();
+          await projectTask.save();
 
-        project.tasks.push(projectTask);
-      }),
-    );
+          project.tasks.push(projectTask);
+        }),
+      );
 
-    await project.save();
+      await project.save();
+    }
 
     return res.json(project);
   }

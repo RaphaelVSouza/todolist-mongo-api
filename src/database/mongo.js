@@ -24,7 +24,6 @@ class Mongodb {
     };
 
     Mongoose.connect(connectionUrl, mongooseOptions).catch((reject) => console.log(reject));
-
     const { connection } = Mongoose;
 
     this._connection = connection;
