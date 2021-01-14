@@ -6,10 +6,12 @@ class UserController {
   async store(req, res) {
     const { email } = req.body;
     const {
-      originalname: name, size, key, location: url = null,
+      originalname: name = null, size = null, key = null, location: url = null,
     } = req.file || {};
 
-    if (await User.findOne({ email })) return res.boom.conflict('User already exists.');
+    const userExists = await User.findOne({ email });
+
+    if (userExists) return res.boom.conflict('User already exists.');
 
     const user = await User.create(req.body);
 
@@ -23,9 +25,10 @@ class UserController {
       key,
       url,
       user_id: id,
-    } || null;
+    };
 
-    if (avatar) await Avatar.updateOne({ user_id: id }, avatar, { upsert: true });
+    const userAvatar = new Avatar(avatar);
+    await userAvatar.save();
 
     if (process.env.NODE_ENV !== 'production') {
       return res.json({

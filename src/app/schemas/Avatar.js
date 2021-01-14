@@ -9,15 +9,12 @@ const s3 = new aws.S3();
 const AvatarSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
   },
   size: {
     type: Number,
-    required: true,
   },
   key: {
     type: String,
-    required: true,
   },
   url: {
     type: String,
@@ -30,8 +27,7 @@ const AvatarSchema = new mongoose.Schema({
 
 AvatarSchema.pre('save', function () {
   const LOCAL_API_URL = `${process.env.SERVER_HOST}${process.env.PORT}`;
-  console.log(this.url);
-  console.log(this.key);
+
   if (!this.url) {
     this.url = `${LOCAL_API_URL}/files/${this.key}`;
   }

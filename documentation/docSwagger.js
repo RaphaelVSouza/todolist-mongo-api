@@ -1,5 +1,10 @@
 import schemas from './docSchemas';
-import routes from './docRoutes';
+
+import signRoutes from './routes/signRoutes';
+import userRoutes from './routes/userRoutes';
+import passwordRoutes from './routes/passwordRoutes';
+import projectRoutes from './routes/projectRoutes';
+import taskRoutes from './routes/taskRoutes';
 
 const config = {
   swaggerDefinition: {
@@ -56,21 +61,21 @@ const config = {
       },
     ],
     paths: {
-      '/register': routes.register,
-      '/login': routes.login,
-      '/user-management/{avatarId}/deletePhoto': routes.avatar_delete,
-      '/verify-email/{verifyToken}': routes.verify_email,
-      '/forgot-password': routes.forgot_password,
-      '/reset-password/{resetToken}': routes.reset_password,
-      '/user-management/edit-account': routes.user_update,
-      '/user-management/delete-account': routes.user_delete,
-      '/my-projects/create-project': routes.project_create,
-      '/my-projects/all-projects': routes.project_index,
-      '/my-projects/{projectId}/edit': routes.project_update,
-      '/my-projects/{projectId}/tasks': routes.project_show,
-      '/my-projects/{projectId}/delete': routes.project_delete,
-      '/projects/{projectId}/tasks/{taskId}/edit': routes.task_update,
-      '/projects/{projectId}/tasks/{taskId}/delete': routes.task_delete,
+      '/register': signRoutes.register,
+      '/login': signRoutes.login,
+      '/user-management/{avatarId}/deletePhoto': userRoutes.avatar_delete,
+      '/verify-email/{verifyToken}': signRoutes.verify_email,
+      '/forgot-password': passwordRoutes.forgot_password,
+      '/reset-password/{resetToken}': passwordRoutes.reset_password,
+      '/user-management/edit-account': userRoutes.user_update,
+      '/user-management/delete-account': userRoutes.user_delete,
+      '/my-projects/create-project': projectRoutes.project_create,
+      '/my-projects/all-projects': projectRoutes.project_index,
+      '/my-projects/{projectId}/edit': projectRoutes.project_update,
+      '/my-projects/{projectId}/tasks': projectRoutes.project_show,
+      '/my-projects/{projectId}/delete': projectRoutes.project_delete,
+      '/projects/{projectId}/tasks/{taskId}/edit': taskRoutes.task_update,
+      '/projects/{projectId}/tasks/{taskId}/delete': taskRoutes.task_delete,
     },
   },
 

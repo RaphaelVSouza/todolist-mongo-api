@@ -5,14 +5,7 @@ import User from '../../src/app/schemas/Users';
 import Project from '../../src/app/schemas/Projects';
 import Task from '../../src/app/schemas/Tasks';
 
-const arr = new Array(faker.random.number({ min: 1, max: 13 })).fill();
-
-const generatedTasks = arr.map(() => ({ title: faker.name.jobTitle() }));
-
-const generatedProjects = arr.map(() => ({
-  title: faker.name.title(),
-  description: faker.name.jobDescriptor(),
-}));
+faker.locale = 'pt_BR';
 
 factory.define('User', User, {
   name: faker.name.findName(),

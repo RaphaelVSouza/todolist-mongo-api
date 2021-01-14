@@ -24,7 +24,7 @@ describe('API Password Test Suite', () => {
     expect(connectionState).toBe('Connected');
   });
 
-  it('1 - Should be able to get a reset password token', async () => {
+  it('1 - Should be able to get a reset password token on use POST in /forgot-password', async () => {
     const { email } = user;
     const response = await request(app)
       .post('/forgot-password')
@@ -38,7 +38,7 @@ describe('API Password Test Suite', () => {
     expect(resetToken.length).toBeGreaterThanOrEqual(20);
   });
 
-  it('2 - Should be able to reset password with the reset token', async () => {
+  it('2 - Should be able to reset password with the reset token on use PUT in /reset-password/:resetToken', async () => {
     const response = await request(app)
       .put(`/reset-password/${resetToken}`)
       .send({
@@ -51,7 +51,7 @@ describe('API Password Test Suite', () => {
     expect(response.body.message).toBe('Password changed successfully!');
   });
 
-  it('3 - Should be able to get an access token on /login with the new password', async () => {
+  it('3 - Should be able to get an access token on use POST in /login with the new password ', async () => {
     const { email } = user;
     const response = await request(app)
       .post('/login')

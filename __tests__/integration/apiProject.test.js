@@ -26,12 +26,6 @@ async function getAccessToken(email, password) {
   return accessToken;
 }
 
-// Criar projetos com tarefas no banco pela rota /my-projects/create-project
-// Ler projetos e suas tarefas pela rota /my-projects/all-projects usando limit
-// Ler projetos e suas tarefas pela rota /my-projects/all-projects usando search
-// Editar um projeto e suas tarefas pela rota /my-projects/:projectId/edit
-// Excluir um projeto e suas tarefas pela rota /my-projects/:projectId/delete
-
 describe('API Project Test Suite', () => {
   beforeAll(async () => {
     const userAttrs = await factory.attrs('User');
@@ -57,7 +51,7 @@ describe('API Project Test Suite', () => {
     expect(connectionState).toBe('Connected');
   });
 
-  it('1 - Should create a Project on post in /my-projects/create-project', async () => {
+  it('1 - Should create a Project on use POST in /my-projects/create-project', async () => {
     const response = await request(app)
       .post('/my-projects/create-project')
       .send({ ...project, tasks })
@@ -69,7 +63,7 @@ describe('API Project Test Suite', () => {
     expect(response.body.project.tasks[0]).toHaveProperty('_id');
   });
 
-  it('2 - Should find a Project on get in /my-projects/all-projects', async () => {
+  it('2 - Should find a Project on use GET in /my-projects/all-projects', async () => {
     const response = await request(app)
       .get('/my-projects/all-projects')
       .set('Authorization', `Bearer ${accessToken}`);
@@ -80,7 +74,7 @@ describe('API Project Test Suite', () => {
     expect(response.body[0]).toHaveProperty('tasks');
   });
 
-  it('3 - Should find a Project by id on get in /my-projects/:projectId/tasks', async () => {
+  it('3 - Should find a Project by id on use GET in /my-projects/:projectId/tasks', async () => {
     const response = await request(app)
       .get(`/my-projects/${projectId}/tasks`)
       .set('Authorization', `Bearer ${accessToken}`);
@@ -89,7 +83,7 @@ describe('API Project Test Suite', () => {
     expect(response.body._id).toBe(projectId);
   });
 
-  it('4 - Should update a Project on put in /my-projects/:projectId/edit', async () => {
+  it('4 - Should update a Project on use PUT in /my-projects/:projectId/edit', async () => {
     const update = { title: 'A New Title' };
 
     const response = await request(app)
@@ -102,7 +96,7 @@ describe('API Project Test Suite', () => {
     expect(response.body.title).toBe(update.title);
   });
 
-  it('5 - Should delete a Project on delete in /my-projects/:projectId/delete', async () => {
+  it('5 - Should delete a Project on use DELETE in /my-projects/:projectId/delete', async () => {
     const response = await request(app)
       .delete(`/my-projects/${projectId}/delete`)
       .set('Accept', 'application/json')
