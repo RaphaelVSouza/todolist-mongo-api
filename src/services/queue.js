@@ -1,7 +1,7 @@
 import Bee from 'bee-queue';
 import redisConfig from '../config/redis.js';
 
-import VerifyMail from '../app/jobs/VerifyMail.js';
+import VerifyMail from '../app/jobs/VerifyMail';
 import ChangePassMail from '../app/jobs/ChangePassMail.js';
 
 const jobs = [VerifyMail, ChangePassMail];
@@ -17,7 +17,6 @@ class Queue {
     jobs.forEach(({ key, handle }) => {
       this.queues[key] = {
         bee: new Bee(key, {
-          removeOnSuccess: true,
           redis: redisConfig,
         }),
         handle,
@@ -25,18 +24,20 @@ class Queue {
     });
   }
 
+
   add(queue, job) {
     return this.queues[queue].bee.createJob(job).save();
   }
 
   processQueue() {
-    jobs.forEach((job) => {
+    jobs.forEach(job => {
       const { bee, handle } = this.queues[job.key];
-      bee.process(handle);
-      bee.on('failed', (job, err) => {
-        console.log(`Queue ${bee.name} FAILED \n`, err);
-      });
+      bee.on('failed', this.handleFailure).process(handle);
     });
+  }
+
+  handleFailure(job, err) {
+    console.log(`Queue ${job.queue.name}: FAILED`, err);
   }
 }
 

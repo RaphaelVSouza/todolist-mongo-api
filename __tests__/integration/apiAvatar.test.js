@@ -99,7 +99,7 @@ describe('API User Test Suite', () => {
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${accessToken}`);
     const isAvatarDeleted = await Avatar.findOne({ user_id: userId });
-    console.log(isAvatarDeleted);
+
     expect(response.status).toBe(200);
     expect(response.body.message).toBe('User is successfully deleted');
     expect(isAvatarDeleted).toBeFalsy();

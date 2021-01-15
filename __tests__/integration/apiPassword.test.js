@@ -62,6 +62,7 @@ describe('API Password Test Suite', () => {
       .set('Accept', 'application/json');
     const { accessToken } = response.body;
     const jwtRegex = /^[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+$/;
+
     expect(response.status).toBe(200);
     expect(accessToken).toMatch(jwtRegex);
   });

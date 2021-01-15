@@ -1,4 +1,4 @@
-import Mail from '../../lib/mail.js';
+import Mail from '../../services/mail.js';
 
 class ChangePasswordMail {
   get key() {

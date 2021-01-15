@@ -1,8 +1,9 @@
-import Mail from '../../lib/mail.js';
+import Mail from '../../services/mail.js';
 
-class VerifyEmail {
+class VerifyMail {
+
   get key() {
-    return 'VerifyEmail';
+    return 'VerifyMail';
   }
 
   async handle({ data }) {
@@ -18,4 +19,4 @@ class VerifyEmail {
   }
 }
 
-export default new VerifyEmail();
+export default new VerifyMail();

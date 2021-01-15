@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import User from '../schemas/Users.js';
 
-import Queue from '../../lib/queue.js';
+import Queue from '../../services/queue.js';
 import ChangePassMail from '../jobs/ChangePassMail.js';
 
 const frontUrl = process.env.FRONT_URL;

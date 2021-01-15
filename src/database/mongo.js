@@ -1,7 +1,5 @@
 import Mongoose from 'mongoose';
 
-import '../bootstrap';
-
 class Mongodb {
   constructor() {
     this.connect();
@@ -36,7 +34,7 @@ class Mongodb {
 
     if (state !== 'Connecting') return state;
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
     return this._status[this._connection.readyState];
   }

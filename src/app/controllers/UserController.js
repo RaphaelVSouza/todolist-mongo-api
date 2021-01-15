@@ -1,6 +1,6 @@
 import User from '../schemas/Users.js';
-import UserMailController from './UserMailController.js';
 import Avatar from '../schemas/Avatar';
+import SendMail from '../jobs/SendMail.js';
 
 class UserController {
   async store(req, res) {
@@ -17,7 +17,7 @@ class UserController {
 
     const { id } = user;
 
-    const { verifyToken } = await UserMailController.sendConfirmationMail(id, email);
+    const { verifyToken } = await SendMail.sendConfirmationMail(id, email);
 
     const avatar = {
       name,
