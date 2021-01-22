@@ -43,8 +43,8 @@ const specs = swaggerDocs(swaggerOptions);
 routes.use('/docs', swaggerUi.serve);
 
 routes.get('/', (req, res) => {
-  res.send('API is running')
-})
+  res.send('API is running');
+});
 
 routes.get(
   '/docs',
@@ -70,7 +70,7 @@ routes.delete(
 );
 
 routes.get('/verify-email/:verifyToken', UserMailController.verifyEmail);
-//routes.post('/verify-email/re-send', UserMailController.reSendVerifyMail);
+// routes.post('/verify-email/re-send', UserMailController.reSendVerifyMail);
 
 routes.post('/forgot-password', validatePasswordStore, PasswordController.store);
 routes.put('/reset-password/:resetToken', validatePasswordUpdate, PasswordController.update);
@@ -121,17 +121,9 @@ routes.delete(
   ProjectController.delete,
 );
 
-routes.put(
-  '/projects/:projectId/tasks/:taskId/edit',
-  passport.authenticate(...jwtConfig),
-  TaskController.update,
-);
+routes.put('/task/:taskId/edit', passport.authenticate(...jwtConfig), TaskController.update);
 
-routes.delete(
-  '/projects/:projectId/tasks/:taskId/delete',
-  passport.authenticate(...jwtConfig),
-  TaskController.delete,
-);
+routes.delete('/task/:taskId/delete', passport.authenticate(...jwtConfig), TaskController.delete);
 
 routes.use(errorMiddleware);
 

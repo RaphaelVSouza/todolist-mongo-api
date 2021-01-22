@@ -74,8 +74,8 @@ const config = {
       '/my-projects/{projectId}/edit': projectRoutes.project_update,
       '/my-projects/{projectId}/tasks': projectRoutes.project_show,
       '/my-projects/{projectId}/delete': projectRoutes.project_delete,
-      '/projects/{projectId}/tasks/{taskId}/edit': taskRoutes.task_update,
-      '/projects/{projectId}/tasks/{taskId}/delete': taskRoutes.task_delete,
+      '/task/{taskId}/edit': taskRoutes.task_update,
+      '/task/{taskId}/delete': taskRoutes.task_delete,
     },
   },
 
