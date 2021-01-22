@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import boom from 'express-boom';
+import cors from 'cors';
 
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
@@ -15,7 +16,6 @@ import { resolve } from 'path';
 import applyPassportStrategy from './app/middlewares/auth.js';
 
 import routes from './routes.js';
-import acessLog from './utils/accessLog.js';
 
 import limiterConfig from './config/limiter.js';
 
@@ -35,16 +35,18 @@ class App {
     this.server.use(express.json());
     this.server.use(express.urlencoded({ extended: false }));
     this.server.use(boom());
+    this.server.use(
+      cors({
+        origin: process.env.FRONT_URL,
+      }),
+    );
     this.server.use('/files', express.static(resolve(__dirname, '..', 'tmp', 'uploads')));
     applyPassportStrategy(passport);
 
     this.server.use(helmet());
-
+    this.server.use(morgan('dev'));
     if (process.env.NODE_ENV === 'production') {
-     // this.server.use(morgan('combined', { stream: acessLog }));
       this.server.use(limiter);
-    } else {
-      this.server.use(morgan('dev'));
     }
   }
 
