@@ -1,5 +1,6 @@
 import User from '../schemas/Users.js';
 import UserMail from '../schemas/UserMails';
+import sendMail from '../jobs/SendMail';
 
 class UserMailController {
   async verifyEmail(req, res) {
@@ -23,6 +24,21 @@ class UserMailController {
 
     return res.json({ message: 'Email verified successfully' });
   }
+
+  async resendVerifyMail(req, res) {
+    const { email } = req.email;
+
+    const { id } = await User.findOne({toString(email)});
+
+    if(!id) return res.boom.notFound('User not found');
+
+    await sendMail.sendConfirmationMail(id, email);
+
+    return res.json({ message: 'Email verified successfully' });
+  }
+
 }
+
+
 
 export default new UserMailController();

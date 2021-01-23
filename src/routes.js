@@ -70,7 +70,7 @@ routes.delete(
 );
 
 routes.get('/verify-email/:verifyToken', UserMailController.verifyEmail);
-// routes.post('/verify-email/re-send', UserMailController.reSendVerifyMail);
+routes.post('/verify-email/re-send', UserMailController.resendVerifyMail);
 
 routes.post('/forgot-password', validatePasswordStore, PasswordController.store);
 routes.put('/reset-password/:resetToken', validatePasswordUpdate, PasswordController.update);
