@@ -1,4 +1,3 @@
-import express from 'express';
 import ExpressBrute from 'express-brute';
 import RedisStore from 'express-brute-redis';
 
@@ -24,9 +23,10 @@ import validateProjectStore from './app/validators/ProjectStore';
 import validateProjectUpdate from './app/validators/ProjectUpdate';
 import validateProjectIndex from './app/validators/ProjectIndex';
 
+import app from './app';
 import redisConfig from './config/redis';
 import multerConfig from './config/multer';
-import swaggerOptions from '../documentation/docSwagger';
+import swaggerOptions from './documentation/docSwagger';
 import { retries } from './config/brute';
 import errorMiddleware from './app/middlewares/error';
 
@@ -35,8 +35,6 @@ const store = new RedisStore(redisConfig);
 const jwtConfig = ['jwt', { session: false }];
 
 const bruteforce = new ExpressBrute(store, { freeRetries: retries });
-
-const app = express();
 
 const specs = swaggerDocs(swaggerOptions);
 

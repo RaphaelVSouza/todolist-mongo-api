@@ -1,5 +1,5 @@
 import 'dotenv/config.js';
-import app from './app.js';
+import app from './routes.js';
 
 if (process.env.NODE_ENV !== 'production') {
   console.warn(

@@ -28,17 +28,14 @@ class UserMailController {
   async resendVerifyMail(req, res) {
     const { email } = req.email;
 
-    const { id } = await User.findOne({toString(email)});
+    const { id } = await User.findOne({ email: toString(email) });
 
-    if(!id) return res.boom.notFound('User not found');
+    if (!id) return res.boom.notFound('User not found');
 
     await sendMail.sendConfirmationMail(id, email);
 
     return res.json({ message: 'Email verified successfully' });
   }
-
 }
-
-
 
 export default new UserMailController();

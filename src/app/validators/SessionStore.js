@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 
 export default async (req, res, next) => {
   try {
+    console.log(req.body);
     const validationSchema = Yup.object().shape({
       email: Yup.string().email().min(3).max(100)
         .required(),

@@ -32,7 +32,9 @@ class PasswordController {
       { useFindAndModify: false },
     );
 
-    await Queue.add(ChangePassMail.key, { email, frontUrl, resetToken });
+    if (process.env.NODE_ENV === 'production') {
+      await Queue.add(ChangePassMail.key, { email, frontUrl, resetToken });
+    }
 
     if (process.env.NODE_ENV !== 'production') {
       return res.json({ message: `Here is your reset token:${resetToken}` });

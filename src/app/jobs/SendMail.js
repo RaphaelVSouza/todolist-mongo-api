@@ -22,7 +22,9 @@ class sendMail {
       { upsert: true },
     );
 
-    await Queue.add(VerifyMail.key, { email, apiUrl, verifyToken });
+    if (process.env.NODE_ENV === 'production') {
+      await Queue.add(VerifyMail.key, { email, apiUrl, verifyToken });
+    }
 
     return { verifyToken };
   }

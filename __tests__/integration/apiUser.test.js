@@ -5,7 +5,7 @@ import request from 'supertest';
 import User from '../../src/app/schemas/Users.js';
 import factory from '../factories/factory';
 import Mongo from '../../src/database/mongo';
-import app from '../../src/app';
+import app from '../../src/routes';
 
 let user = {};
 let verifyToken = '';
@@ -60,6 +60,7 @@ describe('API User Test Suite', () => {
         password,
       })
       .set('Accept', 'application/json');
+    console.log(response.body);
     accessToken = response.body.accessToken;
     const jwtRegex = /^[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+$/;
     expect(response.status).toBe(200);

@@ -2,10 +2,9 @@ import {
   describe, it, expect, beforeAll,
 } from '@jest/globals';
 import request from 'supertest';
-import User from '../../src/app/schemas/Users.js';
 import factory from '../factories/factory';
 import Mongo from '../../src/database/mongo';
-import app from '../../src/app';
+import app from '../../src/routes';
 
 let user = {};
 let resetToken = '';

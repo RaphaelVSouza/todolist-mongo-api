@@ -5,7 +5,7 @@ import request from 'supertest';
 import { resolve } from 'path';
 import factory from '../factories/factory';
 import Mongo from '../../src/database/mongo';
-import app from '../../src/app';
+import app from '../../src/routes';
 import Avatar from '../../src/app/schemas/Avatar';
 
 const avatarImage = resolve(__dirname, '..', 'images', 'avatar-test-image.png');
@@ -48,6 +48,7 @@ describe('API User Test Suite', () => {
       .set('Accept', 'application/json');
     [, verifyToken] = response.body.message.split(':');
 
+    console.log(response.body);
     expect(response.status).toBe(200);
     expect(verifyToken.length).toBeGreaterThanOrEqual(20);
   });

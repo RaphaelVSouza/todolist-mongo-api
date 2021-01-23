@@ -15,8 +15,6 @@ import * as Tracing from '@sentry/tracing';
 import { resolve } from 'path';
 import applyPassportStrategy from './app/middlewares/auth.js';
 
-import app from './routes.js';
-
 import limiterConfig from './config/limiter.js';
 
 import './database/mongo.js';
@@ -25,10 +23,9 @@ const limiter = rateLimit(limiterConfig);
 
 class App {
   constructor() {
-    this.server = app;
+    this.server = express();
     this.sentry(); // Comment this if you don't want to use sentry
     this.middlewares();
-    this.routes();
   }
 
   middlewares() {
@@ -37,7 +34,7 @@ class App {
     this.server.use(boom());
     this.server.use(
       cors({
-        origin: process.env.FRONT_URL,
+        origin: process.env.FRONT_URL ? process.env.FRONT_URL : '*',
       }),
     );
     this.server.use('/files', express.static(resolve(__dirname, '..', 'tmp', 'uploads')));
@@ -48,10 +45,6 @@ class App {
     if (process.env.NODE_ENV === 'production') {
       this.server.use(limiter);
     }
-  }
-
-  routes() {
-    this.server.use(routes);
   }
 
   sentry() {

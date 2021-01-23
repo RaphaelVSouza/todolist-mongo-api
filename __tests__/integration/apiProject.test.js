@@ -5,7 +5,7 @@ import request from 'supertest';
 import Project from '../../src/app/schemas/Projects.js';
 import factory from '../factories/factory';
 import Mongo from '../../src/database/mongo';
-import app from '../../src/app';
+import app from '../../src/routes';
 
 let project = {};
 let tasks = [];
