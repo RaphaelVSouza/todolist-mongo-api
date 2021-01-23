@@ -1,0 +1,9 @@
+{
+  "apps" : [{
+    "name"        : "api1",
+    "script"      : "./src/server.js"
+  },{
+    "name"       : "queue",
+    "script"     : "./src/queue.js"
+  }]
+}
