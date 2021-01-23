@@ -15,7 +15,7 @@ import * as Tracing from '@sentry/tracing';
 import { resolve } from 'path';
 import applyPassportStrategy from './app/middlewares/auth.js';
 
-import routes from './routes.js';
+import app from './routes.js';
 
 import limiterConfig from './config/limiter.js';
 
@@ -25,7 +25,7 @@ const limiter = rateLimit(limiterConfig);
 
 class App {
   constructor() {
-    this.server = express();
+    this.server = app;
     this.sentry(); // Comment this if you don't want to use sentry
     this.middlewares();
     this.routes();

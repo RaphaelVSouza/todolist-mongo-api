@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express from 'express';
 import ExpressBrute from 'express-brute';
 import RedisStore from 'express-brute-redis';
 
@@ -36,17 +36,17 @@ const jwtConfig = ['jwt', { session: false }];
 
 const bruteforce = new ExpressBrute(store, { freeRetries: retries });
 
-const routes = new Router();
+const app = express();
 
 const specs = swaggerDocs(swaggerOptions);
 
-routes.use('/docs', swaggerUi.serve);
+app.use('/docs', swaggerUi.serve);
 
-routes.get('/', (req, res) => {
+app.get('/', (req, res) => {
   res.send('API is running');
 });
 
-routes.get(
+app.get(
   '/docs',
   swaggerUi.setup(specs, {
     customCss: '.swagger-ui .topbar { display: none !important }',
@@ -54,28 +54,19 @@ routes.get(
   }),
 );
 
-routes.post(
-  '/register',
-  multer(multerConfig).single('file'),
-  validateUserStore,
-  UserController.store,
-);
+app.post('/register', multer(multerConfig).single('file'), validateUserStore, UserController.store);
 
-routes.post('/login', bruteforce.prevent, validateSessionStore, SessionController.store);
+app.post('/login', bruteforce.prevent, validateSessionStore, SessionController.store);
 
-routes.delete(
-  '/:avatarId/deletePhoto',
-  passport.authenticate(...jwtConfig),
-  AvatarController.delete,
-);
+app.delete('/:avatarId/deletePhoto', passport.authenticate(...jwtConfig), AvatarController.delete);
 
-routes.get('/verify-email/:verifyToken', UserMailController.verifyEmail);
-routes.post('/verify-email/re-send', UserMailController.resendVerifyMail);
+app.get('/verify-email/:verifyToken', UserMailController.verifyEmail);
+app.post('/verify-email/re-send', UserMailController.resendVerifyMail);
 
-routes.post('/forgot-password', validatePasswordStore, PasswordController.store);
-routes.put('/reset-password/:resetToken', validatePasswordUpdate, PasswordController.update);
+app.post('/forgot-password', validatePasswordStore, PasswordController.store);
+app.put('/reset-password/:resetToken', validatePasswordUpdate, PasswordController.update);
 
-routes.put(
+app.put(
   '/user-management/edit-account',
   passport.authenticate(...jwtConfig),
   multer(multerConfig).single('file'),
@@ -83,48 +74,48 @@ routes.put(
   UserController.update,
 );
 
-routes.delete(
+app.delete(
   '/user-management/delete-account',
   passport.authenticate(...jwtConfig),
   validateUserUpdate,
   UserController.delete,
 );
 
-routes.post(
+app.post(
   '/my-projects/create-project',
   validateProjectStore,
   passport.authenticate(...jwtConfig),
   ProjectController.store,
 );
 
-routes.get(
+app.get(
   '/my-projects/all-projects',
   passport.authenticate(...jwtConfig),
   validateProjectIndex,
   ProjectController.index,
 );
 
-routes.get(
+app.get(
   '/my-projects/:projectId/tasks',
   passport.authenticate(...jwtConfig),
   ProjectController.show,
 );
-routes.put(
+app.put(
   '/my-projects/:projectId/edit',
   validateProjectUpdate,
   passport.authenticate(...jwtConfig),
   ProjectController.update,
 );
-routes.delete(
+app.delete(
   '/my-projects/:projectId/delete',
   passport.authenticate(...jwtConfig),
   ProjectController.delete,
 );
 
-routes.put('/task/:taskId/edit', passport.authenticate(...jwtConfig), TaskController.update);
+app.put('/task/:taskId/edit', passport.authenticate(...jwtConfig), TaskController.update);
 
-routes.delete('/task/:taskId/delete', passport.authenticate(...jwtConfig), TaskController.delete);
+app.delete('/task/:taskId/delete', passport.authenticate(...jwtConfig), TaskController.delete);
 
-routes.use(errorMiddleware);
+app.use(errorMiddleware);
 
-export default routes;
+export default app;
