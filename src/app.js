@@ -24,7 +24,7 @@ const limiter = rateLimit(limiterConfig);
 class App {
   constructor() {
     this.server = express();
-    this.sentry(); // Comment this if you don't want to use sentry
+    // this.sentry(); // Comment this if you don't want to use sentry
     this.middlewares();
   }
 
