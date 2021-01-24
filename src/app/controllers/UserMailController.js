@@ -26,7 +26,7 @@ class UserMailController {
   }
 
   async resendVerifyMail(req, res) {
-    const { email } = req.email;
+    const { email } = req.body;
 
     const { id } = await User.findOne({ email: toString(email) });
 
