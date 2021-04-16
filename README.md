@@ -61,10 +61,6 @@ MAIL_PASS=
 REDIS_HOST=localhost
 REDIS_PORT=6379
 
-
-##Create an account on https://sentry.io/signup/ for pick your sentry DNS, or just comment sentry() on app.js
-SENTRY_DNS=
-
 ##For use a S3 bucket you need a AWS account and use your credentials https://aws.amazon.com/
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
