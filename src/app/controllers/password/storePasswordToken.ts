@@ -9,7 +9,10 @@ import { Request, Response } from 'express';
 export default async function storePassword(req: Request, res: Response): Promise<Response> {
   const { email } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email })
+  .select(
+    '+passwordResetToken +passwordResetExpires',
+  );;
 
   if (!user) return res.status(404).json({ error: 'User not found'})
 
@@ -20,16 +23,14 @@ export default async function storePassword(req: Request, res: Response): Promis
   const now = new Date();
   now.setHours(now.getHours() + 1); // Token expires in 1 hour
 
-  await User.findByIdAndUpdate(
-    user.id,
-    {
-      $set: {
-        passwordResetToken: resetToken,
-        passwordResetExpires: now,
-      },
-    },
-    { useFindAndModify: false },
-  );
+  if(user.passwordResetExpires && now < user.passwordResetExpires) {
+    return res.status(403).json({error: 'Reset token isn\'t expired yet.'})
+  }
+
+  user.passwordResetExpires = now;
+  user.passwordResetToken = resetToken;
+
+  await user.save();
 
   if (process.env.NODE_ENV === 'production') {
     const { FRONT_URL } = process.env;
@@ -40,7 +41,7 @@ export default async function storePassword(req: Request, res: Response): Promis
     return res.json({ message: `Here is your reset token:${resetToken}` });
   }
 
-  return res.json({ message: 'Email successfully sent!' });
+  return res.json({ message: 'Reset password mail successfully sent!' });
 }
 
 
