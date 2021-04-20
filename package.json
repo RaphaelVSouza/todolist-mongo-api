@@ -9,7 +9,7 @@
     "yarn": "1.22.5"
   },
   "scripts": {
-    "start": "--max_old_space_size=400 start tsc",
+    "start": "--max_old_space_size=400 tsc",
     "poststart": "cross-env NODE_ENV=production pm2 start",
     "test": "cross-env NODE_ENV=test jest --forceExit --runInBand",
     "dev": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
