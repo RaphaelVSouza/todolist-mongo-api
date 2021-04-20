@@ -17,7 +17,7 @@ interface IUserSchema extends Document {
     generateAccessToken: (params: object) => {}
 }
 
-const UserSchema = new Schema(
+const UserSchema:any = new Schema(
     {
         name: {
             type: String,
