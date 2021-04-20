@@ -14,7 +14,7 @@ export default async function createUser(req: Request, res: Response): Promise<R
   const { email } = req.body;
 
   // Pick file properties if exists or send an empty avatar object
-console.log(req.file)
+
     let { originalname: name, size, key, location: url }: IAvatarFile = req.file || emptyAvatar;
 
 

@@ -1,9 +1,12 @@
 {
-  "apps" : [{
-    "name"        : "api1",
-    "script"      : "./build/server.js"
-  },{
-    "name"       : "queue",
-    "script"     : "./build/queue.js"
-  }]
+  "apps": [
+    {
+      "name": "todolist-server",
+      "script": "./dist/server.js"
+    },
+    {
+      "name": "todolist-queue",
+      "script": "./dist/queue.js"
+    }
+  ]
 }

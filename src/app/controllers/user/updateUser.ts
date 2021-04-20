@@ -33,16 +33,16 @@ export default async function createUser(req: Request, res: Response): Promise<R
   }).select("_id name email isVerified");
 
   const emptyAvatar = {
-    originalname: null, size: null, filename: null, path: null
+    originalname: '', size: null, key: '', location: ''
   }
 
-  let { originalname, size, filename, path }: IAvatarFile = req.file || emptyAvatar;
+  let { originalname: name, size, key, location: url }: IAvatarFile = req.file || emptyAvatar;
 
   let newAvatar = {
-    name: originalname,
+    name,
     size,
-    key: filename,
-    url: path,
+    key,
+    url,
   };
 
   let avatar = await Avatar.findOne({ user_id: user._id });
