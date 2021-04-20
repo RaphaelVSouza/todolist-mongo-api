@@ -27,6 +27,7 @@ class App {
     this.server = express();
     this.middlewares();
     this.errorHandling();
+    console.log(process.env.MAIL_PASS)
   }
 
   private middlewares() {

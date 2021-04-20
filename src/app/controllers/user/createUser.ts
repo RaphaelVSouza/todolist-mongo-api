@@ -8,14 +8,14 @@ import { IAvatarFile } from '../../interfaces/avatarFile';
 export default async function createUser(req: Request, res: Response): Promise<Response> {
 
   const emptyAvatar = {
-    originalname: null, size: null, filename: null, path: null
+    originalname: '', size: null, key: '', location: ''
   }
 
   const { email } = req.body;
 
   // Pick file properties if exists or send an empty avatar object
-
-    let { originalname, size, filename, path }: IAvatarFile = req.file || emptyAvatar;
+console.log(req.file)
+    let { originalname: name, size, key, location: url }: IAvatarFile = req.file || emptyAvatar;
 
 
   const userExists = await User.findOne({ email });
@@ -28,14 +28,16 @@ export default async function createUser(req: Request, res: Response): Promise<R
 
   const { verifyToken } = await SendMail.sendConfirmationMail(user.id, email);
 
-    await Avatar.create(
+   const avatar = await Avatar.create(
       {
-        name: originalname,
-        size: size,
-        key: filename,
-        url: path,
+        name,
+        size,
+        key,
+        url,
         user_id: user._id
       })
+
+      if(avatar) console.log(avatar)
 
   if (process.env.NODE_ENV !== "production") {
 

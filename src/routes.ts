@@ -65,7 +65,7 @@ app.post(
 );
 
 app.delete(
-  "/user-management/deletePhoto",
+  "/user-management/delete-photo",
   passport.authenticate("jwt", { session: false }),
   AvatarController.delete
 );

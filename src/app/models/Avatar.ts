@@ -1,11 +1,11 @@
 import { Document, model, Model, Types, Schema, HookNextFunction } from 'mongoose'
-//import { S3 } from 'aws-sdk'
+import { S3 } from 'aws-sdk'
 import path from 'path'
 import fs from 'fs'
 import { promisify } from 'util'
 import { IAvatar } from '../interfaces/avatar'
 
-//const s3 = new S3()
+const s3 = new S3()
 
 interface IAvatarSchema extends IAvatar, Document {
 
@@ -47,21 +47,25 @@ AvatarSchema.pre('save', function (this: IAvatarSchema, next: HookNextFunction) 
 })
 
 AvatarSchema.pre('remove', async function (this: IAvatarSchema, next: HookNextFunction) {
-    if (this.key) {
-        await promisify(fs.unlink)(
-            path.resolve(
-                __dirname,
-                '..',
-                '..',
-                '..',
-                'tmp',
-                'uploads',
-                this.key
-            )
-        )
-    }
+  if (process.env.STORAGE_TYPE === "s3") {
 
-    next()
+    return s3
+      .deleteObject({
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: this.key
+      })
+      .promise()
+      .then(response => {
+        console.log(response);
+      })
+      .catch(response => {
+        console.log(response.status);
+      });
+  } else {
+    return promisify(fs.unlink)(
+      path.resolve(__dirname,'..', '..', '..', 'tmp', 'uploads', this.key)
+    );
+  }
 })
 
 const Avatar: Model<IAvatarSchema> = model('Avatar', AvatarSchema)

@@ -1,8 +1,8 @@
 interface IAvatarFile {
   originalname: string | null
   size?: number | null
-  filename: string  | null
-  path?: string | null
+  key?: string  | null
+  location?: string | null
 
 }
 
