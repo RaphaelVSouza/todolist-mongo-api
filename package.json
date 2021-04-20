@@ -5,14 +5,15 @@
   "type": "commonjs",
   "license": "MIT",
   "engines": {
-    "node": "14.15.1"
+    "node": "14.15.1",
+    "yarn": "1.22.5"
   },
   "scripts": {
     "prestart": "tsc",
     "start": "cross-env NODE_ENV=production pm2 start",
     "test": "cross-env NODE_ENV=test jest --forceExit --runInBand",
     "dev": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
-    "dev:queue": "tsnd ./src/queue.ts"
+    "dev:queue": "tsnd --transpile-only --ignore-watch node_modules --respawn ./src/queue.ts"
   },
   "dependencies": {
     "aws-sdk": "^2.824.0",
