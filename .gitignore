@@ -4,3 +4,4 @@ coverage
 logs/access.log
 aws-api-key.pem
 build
+tmp/uploads/*
