@@ -9,8 +9,8 @@
     "yarn": "1.22.5"
   },
   "scripts": {
-    "prestart": "tsc",
-    "start": "cross-env NODE_ENV=production pm2 start --max-memory-restart 300M",
+    "start": " tsc",
+    "poststart": "cross-env NODE_ENV=production pm2 start",
     "test": "cross-env NODE_ENV=test jest --forceExit --runInBand",
     "dev": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
     "dev:queue": "tsnd --transpile-only --ignore-watch node_modules --respawn ./src/queue.ts"
@@ -39,8 +39,8 @@
     "pm2": "^4.5.6",
     "swagger-jsdoc": "^6.0.1",
     "swagger-ui-express": "^4.1.6",
-    "yup": "^0.29.3",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.3",
+    "yup": "^0.29.3"
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.6.1",
