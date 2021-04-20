@@ -48,7 +48,7 @@ class App {
 
 
     if(process.env.NODE_ENV === 'production') {
-      this.server.use(morgan('combined', { stream: writeAccessLog() })) // If in prodution, write access route logs on access.log
+      //this.server.use(morgan('combined', { stream: writeAccessLog() }))
       this.server.use(limiter); // Configure rate limit to prevent DDOS
     } else {
       this.server.use(morgan("dev")); // Console.log API Routes access
