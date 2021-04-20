@@ -21,7 +21,7 @@ class Queue {
             }
             this.queues[key] = {
                 bee: new bee_queue_1.default(key, {
-                    redis: { host: redis_1.default.host, port: +redis_1.default.port },
+                    redis: { host: redis_1.default.host, port: +redis_1.default.port, password: redis_1.default.password, },
                 }),
                 handle,
             };

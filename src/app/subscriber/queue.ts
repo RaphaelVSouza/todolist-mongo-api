@@ -5,8 +5,6 @@ import VerifyMail from './jobs/VerifyMail';
 import ChangePassMail from './jobs/ChangePassMail';
 
 const jobs = [VerifyMail, ChangePassMail];
-
-
 class Queue {
   private queues: object;
 
@@ -29,7 +27,7 @@ class Queue {
       this.queues[key] = {
         bee: new Bee(key, {
           redis:
-           { host: redisConfig.host, port: +redisConfig.port },
+           { host: redisConfig.host, port: +redisConfig.port, password: redisConfig.password, },
         }),
         handle,
       };
