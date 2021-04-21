@@ -1,5 +1,6 @@
 import ExpressBrute from "express-brute";
-import RedisStore from "express-brute-redis";
+import mongo from './database/mongo';
+import MongoStore from 'express-brute-mongo';
 
 import passport from "passport";
 import swaggerUi from "swagger-ui-express";
@@ -24,13 +25,16 @@ import validateProjectUpdate from "./app/middlewares/validators/ProjectUpdate";
 import validateProjectIndex from "./app/middlewares/validators/ProjectIndex";
 
 import app from "./app";
-import redisConfig from "./app/config/redis";
 import multerConfig from "./app/config/multer";
 import swaggerOptions from "./documentation/docSwagger";
 import retries from "./app/config/brute";
 import errorMiddleware from "./app/middlewares/error";
 
-const store = new RedisStore(redisConfig);
+const mongoConnection = mongo.connect();
+
+const store = new(MongoStore(function (ready) {
+  ready(mongoConnection.db.collection('bruteforce-store'));
+}));
 
 const bruteforce = new ExpressBrute(store, { freeRetries: retries });
 

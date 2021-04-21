@@ -4,7 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_brute_1 = __importDefault(require("express-brute"));
-const express_brute_redis_1 = __importDefault(require("express-brute-redis"));
+const mongo_1 = __importDefault(require("./database/mongo"));
+const express_brute_mongo_1 = __importDefault(require("express-brute-mongo"));
 const passport_1 = __importDefault(require("passport"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
@@ -25,12 +26,14 @@ const ProjectStore_1 = __importDefault(require("./app/middlewares/validators/Pro
 const ProjectUpdate_1 = __importDefault(require("./app/middlewares/validators/ProjectUpdate"));
 const ProjectIndex_1 = __importDefault(require("./app/middlewares/validators/ProjectIndex"));
 const app_1 = __importDefault(require("./app"));
-const redis_1 = __importDefault(require("./app/config/redis"));
 const multer_2 = __importDefault(require("./app/config/multer"));
 const docSwagger_1 = __importDefault(require("./documentation/docSwagger"));
 const brute_1 = __importDefault(require("./app/config/brute"));
 const error_1 = __importDefault(require("./app/middlewares/error"));
-const store = new express_brute_redis_1.default(redis_1.default);
+const mongoConnection = mongo_1.default.connect();
+const store = new (express_brute_mongo_1.default(function (ready) {
+    ready(mongoConnection.db.collection('bruteforce-store'));
+}));
 const bruteforce = new express_brute_1.default(store, { freeRetries: brute_1.default });
 const specs = swagger_jsdoc_1.default(docSwagger_1.default);
 app_1.default.use("/docs", swagger_ui_express_1.default.serve);
