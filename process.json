@@ -9,9 +9,7 @@
     },
     {
       "name": "api-app",
-      "script": "./dist/server.js",
-      "instances": 4,
-      "exec_mode": "cluster"
+      "script": "./dist/server.js"
     }
   ]
 }
