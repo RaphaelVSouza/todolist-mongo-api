@@ -34,9 +34,7 @@ class App {
     this.server.use(express.json());
     this.server.use(express.urlencoded({ extended: false }));
     this.server.use(
-      cors({
-        origin: process.env.NODE_ENV === 'production' ? process.env.FRONT_URL : "*", // If not in production, enable cors to all origins
-      })
+      cors()
     );
     this.server.use(
       "/files",
