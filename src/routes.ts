@@ -32,7 +32,7 @@ import retries from "./app/config/brute";
 import errorMiddleware from "./app/middlewares/error";
 
 const store = new MongoStore(function (ready) {
-  MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db: any) {
+  MongoClient.connect(process.env.MONGO_URL, function(err, db: any) {
     if (err) throw err;
     ready(db.collection('bruteforce-store'));
   });
