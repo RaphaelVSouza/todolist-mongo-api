@@ -9,7 +9,7 @@
     "yarn": "1.22.5"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=production pm2 start",
+    "start": "cross-env NODE_ENV=production pm2 start ecosystem.config.js",
     "test": "cross-env NODE_ENV=test jest --forceExit --runInBand",
     "dev": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
     "dev:queue": "tsnd --transpile-only --ignore-watch node_modules --respawn ./src/queue.ts"
