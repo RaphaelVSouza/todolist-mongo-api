@@ -15,7 +15,7 @@ const config = {
             schemas: docSchemas_1.default,
             securitySchemes: {
                 Bearer: {
-                    type: 'http',
+                    type: 'https',
                     scheme: 'bearer',
                     bearerFormat: 'JWT',
                 },
@@ -42,7 +42,7 @@ const config = {
         },
         servers: [
             {
-                url: `http://localhost:${process.env.PORT}`,
+                url: `https://localhost:${process.env.PORT}`,
                 description: 'Local Server',
             },
         ],
