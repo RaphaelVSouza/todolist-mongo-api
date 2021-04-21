@@ -20,7 +20,6 @@ class App {
         this.server = express_1.default();
         this.middlewares();
         this.errorHandling();
-        console.log(process.env.MAIL_PASS);
     }
     middlewares() {
         this.server.use(express_1.default.json());
