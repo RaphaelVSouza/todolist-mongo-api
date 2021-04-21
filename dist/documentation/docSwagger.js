@@ -42,7 +42,7 @@ const config = {
         },
         servers: [
             {
-                url: `https://${process.env.FRONT_URL}:${process.env.PORT}`,
+                url: `${process.env.FRONT_URL}:${process.env.PORT}`,
                 description: 'Server',
             },
         ],
