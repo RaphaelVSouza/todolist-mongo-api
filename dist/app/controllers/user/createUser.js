@@ -19,15 +19,13 @@ async function createUser(req, res) {
     if (!user)
         throw Error('Error on creating a new user');
     const { verifyToken } = await UserMailService_1.default.sendConfirmationMail(user.id, email);
-    const avatar = await Avatar_1.Avatar.create({
+    await Avatar_1.Avatar.create({
         name,
         size,
         key,
         url,
         user_id: user._id
     });
-    if (avatar)
-        console.log(avatar);
     if (process.env.NODE_ENV !== "production") {
         return res.json({
             message: `Here is your verify token:${verifyToken}`,

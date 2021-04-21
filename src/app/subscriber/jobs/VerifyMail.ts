@@ -9,7 +9,7 @@ class VerifyMail {
   }
 
   async handle({ data }: { data: any}) {
-    const { email, verifyToken, API_URL } = data;
+    const { email, verifyToken, FRONT_URL } = data;
     const welcomeImg = path.resolve(__dirname, '..', '..', '..', '..', 'views', 'email', 'images', 'welcome.svg')
 
     await MailService.sendMail({
@@ -17,7 +17,7 @@ class VerifyMail {
       from: 'random@company.com.br',
       subject: 'Email confirmation',
       template: 'email_confirmation',
-      context: { verifyToken, API_URL },
+      context: { verifyToken, FRONT_URL },
       attachments: [{
         filename: 'welcome.svg',
         path: welcomeImg,

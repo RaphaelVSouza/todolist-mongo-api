@@ -4,6 +4,7 @@ import SendMail from '../../services/UserMailService';
 
 import { Request, Response } from 'express';
 import { IAvatarFile } from '../../interfaces/avatarFile';
+import queue from '../../subscriber/queue';
 
 export default async function createUser(req: Request, res: Response): Promise<Response> {
 
@@ -28,7 +29,7 @@ export default async function createUser(req: Request, res: Response): Promise<R
 
   const { verifyToken } = await SendMail.sendConfirmationMail(user.id, email);
 
-   const avatar = await Avatar.create(
+   await Avatar.create(
       {
         name,
         size,
@@ -36,8 +37,6 @@ export default async function createUser(req: Request, res: Response): Promise<R
         url,
         user_id: user._id
       })
-
-      if(avatar) console.log(avatar)
 
   if (process.env.NODE_ENV !== "production") {
 

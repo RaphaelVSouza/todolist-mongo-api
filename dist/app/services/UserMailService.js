@@ -18,8 +18,8 @@ class MailService {
             user_id: id
         }, { upsert: true });
         if (process.env.NODE_ENV === 'production') {
-            const API_URL = `${process.env.SERVER_HOST}${process.env.PORT}`;
-            await queue_1.default.add(VerifyMail_1.default.key, { email, API_URL, verifyToken });
+            const { FRONT_URL } = process.env;
+            await queue_1.default.add(VerifyMail_1.default.key, { email, FRONT_URL, verifyToken });
         }
         return { verifyToken };
     }

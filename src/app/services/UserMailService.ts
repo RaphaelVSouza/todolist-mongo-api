@@ -22,8 +22,8 @@ class MailService {
     )
 
     if (process.env.NODE_ENV === 'production') {
-      const API_URL = `${process.env.SERVER_HOST}${process.env.PORT}`
-      await Queue.add(VerifyMail.key, { email, API_URL, verifyToken })
+      const { FRONT_URL } = process.env
+      await Queue.add(VerifyMail.key, { email, FRONT_URL, verifyToken })
       }
 
     return { verifyToken }
