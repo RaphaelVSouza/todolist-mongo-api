@@ -2,11 +2,11 @@ module.exports = {
   apps: [
     {
       name: "todolist-server",
-      script: "./dist/server.js"
+      script: "node dist/server.js"
     },
     {
       name: "todolist-queue",
-      script: "./dist/queue.js"
+      script: "node dist/queue.js"
     }
   ]
 }
