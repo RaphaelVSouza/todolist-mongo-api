@@ -1,5 +1,6 @@
 import ExpressBrute from "express-brute";
-import mongo from './database/mongo';
+import { MongoClient } from 'mongodb'
+
 import MongoStore from 'express-brute-mongo';
 
 import passport from "passport";
@@ -30,11 +31,12 @@ import swaggerOptions from "./documentation/docSwagger";
 import retries from "./app/config/brute";
 import errorMiddleware from "./app/middlewares/error";
 
-const mongoConnection = mongo.connect();
-
-const store = new(MongoStore(function (ready) {
-  ready(mongoConnection.db.collection('bruteforce-store'));
-}));
+const store = new MongoStore(function (ready) {
+  MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db: any) {
+    if (err) throw err;
+    ready(db.collection('bruteforce-store'));
+  });
+});
 
 const bruteforce = new ExpressBrute(store, { freeRetries: retries });
 
