@@ -34,7 +34,9 @@ class App {
     this.server.use(express.json());
     this.server.use(express.urlencoded({ extended: false }));
     this.server.use(
-      cors()
+      cors({
+        allowedHeaders: ['Content-type', 'Authorization'],
+      })
     );
     this.server.use(
       "/files",

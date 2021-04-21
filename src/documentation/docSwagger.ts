@@ -39,8 +39,8 @@ const config = {
     },
     servers: [
       {
-        url: `https://localhost:${process.env.PORT}`,
-        description: 'Local Server',
+        url: `https://${process.env.FRONT_URL}:${process.env.PORT}`,
+        description: 'Server',
       },
     ],
     tags: [
