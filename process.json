@@ -9,7 +9,10 @@
     },
     {
       "name": "api-app",
-      "script": "./dist/server.js"
+      "script": "./dist/server.js",
+      "env_production": {
+        "NODE_ENV": "production"
+      }
     }
   ]
 }
