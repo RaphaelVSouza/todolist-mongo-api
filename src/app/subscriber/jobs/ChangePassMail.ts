@@ -9,7 +9,7 @@ class ChangePasswordMail {
 
     await MailService.sendMail({
       to: email,
-      from: 'random@company.com.br',
+      from: 'TodoList <app.todolistraphael@gmail.com>',
       subject: 'Change password',
       template: 'forgot_password',
       context: { resetToken, FRONT_URL }

@@ -10,7 +10,6 @@ import cors from "cors";
 
 import { resolve } from "path";
 import applyJWTStrategy from "./app/middlewares/passport/jwt-strategy/jwtAuth";
-import { writeAccessLog } from './utils/accessLog';
 
 import limiterConfig from "./app/config/limiter";
 
@@ -46,12 +45,11 @@ class App {
 
     this.server.use(helmet());
 
+    this.server.use(morgan("dev")); // Console.log API Routes access
 
     if(process.env.NODE_ENV === 'production') {
-      //this.server.use(morgan('combined', { stream: writeAccessLog() }))
+
       this.server.use(limiter); // Configure rate limit to prevent DDOS
-    } else {
-      this.server.use(morgan("dev")); // Console.log API Routes access
     }
 
   }

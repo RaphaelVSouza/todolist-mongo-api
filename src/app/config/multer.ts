@@ -4,12 +4,8 @@ import aws from 'aws-sdk'
 import multers3 from 'multer-s3-v2'
 import crypto from 'crypto'
 import { Request } from 'express';
-import B2 from 'backblaze-b2';
-
-
 
 const { STORAGE_TYPE, AWS_BUCKET_NAME } = process.env
-
 
 const path = resolve(__dirname, '..', '..', '..', 'tmp', 'uploads')
 

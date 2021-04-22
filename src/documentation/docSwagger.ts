@@ -12,7 +12,7 @@ const config = {
       schemas,
       securitySchemes: {
         Bearer: {
-          type: 'https',
+          type: 'http',
           scheme: 'bearer',
           bearerFormat: 'JWT',
         },
