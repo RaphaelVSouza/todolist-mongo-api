@@ -67,8 +67,17 @@ AWS_SECRET_ACCESS_KEY=
 AWS_DEFAULT_REGION=
 AWS_BUCKET_NAME=
 
+##Keep it empty if you want to use mailtrap or fill with gmail
+MAIL_SERVICE=
 
-SERVER_PORT=3001
+##Need a Google Cloud for send emails with gmail https://cloud.google.com/
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REDIRECT_URL=
+GOOGLE_REFRESH_TOKEN=
+
+
+SERVER_PORT=3005
 
 REDIS_HOST=localhost
 REDIS_PORT=6379
@@ -94,7 +103,7 @@ npm run dev:queue
 
 ## Testing the API endpoints
 
-Enter on http://localhost:3001/docs on your browser to access the swagger documentation.
+Enter on http://localhost:3005/docs on your browser to access the swagger documentation.
 
 ## License
 
