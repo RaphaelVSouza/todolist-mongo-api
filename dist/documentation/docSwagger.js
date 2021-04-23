@@ -66,7 +66,7 @@ const config = {
         paths: {
             '/register': signRoutes_1.default.register,
             '/login': signRoutes_1.default.login,
-            '/user-management/deletePhoto': userRoutes_1.default.avatar_delete,
+            '/user-management/delete-photo': userRoutes_1.default.avatar_delete,
             '/verify-email/{verifyToken}': signRoutes_1.default.verify_email,
             '/forgot-password': passwordRoutes_1.default.forgot_password,
             '/reset-password/{resetToken}': passwordRoutes_1.default.reset_password,
