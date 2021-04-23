@@ -4,14 +4,6 @@ const userRoutes = {
       tags: ['User Management - Avatar'],
       description: 'Delete Avatar',
       operationId: 'deleteAvatar',
-      parameters: [
-        {
-          name: 'avatarId',
-          description: '',
-          in: 'path',
-          required: true,
-        },
-      ],
       responses: {
         200: {
           description: 'Avatar Successfully deleted',
