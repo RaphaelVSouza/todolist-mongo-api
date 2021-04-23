@@ -1,7 +1,7 @@
 {
   "name": "todolist",
   "version": "1.0.0",
-  "main": "./build/server.js",
+  "main": "dist/server.js",
   "type": "commonjs",
   "license": "MIT",
   "engines": {
@@ -9,6 +9,7 @@
     "yarn": "1.22.5"
   },
   "scripts": {
+    "build": "tsc",
     "start": "cross-env NODE_ENV=production pm2-runtime start process.json",
     "test": "cross-env NODE_ENV=test jest --forceExit --runInBand",
     "dev": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
