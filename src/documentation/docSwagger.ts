@@ -65,6 +65,7 @@ const config = {
       '/login': signRoutes.login,
       '/user-management/delete-photo': userRoutes.avatar_delete,
       '/verify-email/{verifyToken}': signRoutes.verify_email,
+      '/verify-email/re-send': signRoutes.resend_verify_email,
       '/forgot-password': passwordRoutes.forgot_password,
       '/reset-password/{resetToken}': passwordRoutes.reset_password,
       '/user-management/edit-account': userRoutes.user_update,

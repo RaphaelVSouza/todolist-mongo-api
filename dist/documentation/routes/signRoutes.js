@@ -54,6 +54,35 @@ const signRoutes = {
             security: [],
         },
     },
+    resend_verify_email: {
+        post: {
+            tags: ['Register/Session'],
+            description: 'Resend Verify Email to login',
+            operationId: 'resendVerifyEmail',
+            requestBody: {
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                email: {
+                                    type: 'string',
+                                    example: 'john.doe25@email.com',
+                                },
+                            },
+                        },
+                    },
+                },
+                required: true,
+            },
+            responses: {
+                200: {
+                    description: 'Email verified successfully',
+                },
+            },
+            security: [],
+        },
+    },
     login: {
         post: {
             tags: ['Register/Session'],
