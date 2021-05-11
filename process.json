@@ -1,0 +1,18 @@
+{
+  "apps": [
+    {
+      "name": "worker",
+      "script": "./dist/queue.js",
+      "env_production": {
+        "NODE_ENV": "production"
+      }
+    },
+    {
+      "name": "api-app",
+      "script": "./dist/server.js",
+      "env_production": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}
