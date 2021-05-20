@@ -1,19 +1,16 @@
-import { Response, Request } from 'express';
-import { baseController } from './base/baseController';
+import { Response, Request } from 'express'
+import { baseController } from './base/baseController'
 
-import sendVerifyMail from './userMail/sendVerifyMail';
-import checkEmail from './userMail/checkEmail';
-
+import sendVerifyMail from './userMail/sendVerifyMail'
+import checkEmail from './userMail/checkEmail'
 
 class UserMailController extends baseController {
-  async sendVerificationMail (req: Request, res: Response): Promise<Response> {
-    return sendVerifyMail(req, res);
-
+  sendVerificationMail(req: Request, res: Response): Promise<Response> {
+    return sendVerifyMail(req, res)
   }
 
-  async verifyEmail (req: Request, res: Response): Promise<Response> {
-    return checkEmail(req, res);
-
+  verifyEmail(req: Request, res: Response): Promise<Response> {
+    return checkEmail(req, res)
   }
 }
 

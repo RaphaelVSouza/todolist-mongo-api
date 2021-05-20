@@ -10,30 +10,30 @@ const taskRoutes = {
           name: 'projectId',
           description: '',
           in: 'path',
-          required: true,
+          required: true
         },
         {
           name: 'taskId',
           description: '',
           in: 'path',
-          required: true,
-        },
+          required: true
+        }
       ],
       responses: {
         200: {
-          description: 'Task Successfully updated',
+          description: 'Task Successfully updated'
         },
         400: {
-          description: 'Bad Request',
+          description: 'Bad Request'
         },
         401: {
-          description: 'Unauthorized',
+          description: 'Unauthorized'
         },
         404: {
-          description: 'Task not found',
-        },
-      },
-    },
+          description: 'Task not found'
+        }
+      }
+    }
   },
   task_delete: {
     delete: {
@@ -46,31 +46,31 @@ const taskRoutes = {
           name: 'projectId',
           description: '',
           in: 'path',
-          required: true,
+          required: true
         },
         {
           name: 'taskId',
           description: '',
           in: 'path',
-          required: true,
-        },
+          required: true
+        }
       ],
       responses: {
         200: {
-          description: 'Task Successfully updated',
+          description: 'Task Successfully updated'
         },
         400: {
-          description: 'Bad Request',
+          description: 'Bad Request'
         },
         401: {
-          description: 'Unauthorized',
+          description: 'Unauthorized'
         },
         404: {
-          description: 'Task not found',
-        },
-      },
-    },
-  },
-};
+          description: 'Task not found'
+        }
+      }
+    }
+  }
+}
 
-export default taskRoutes;
+export default taskRoutes

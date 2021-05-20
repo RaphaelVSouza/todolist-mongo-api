@@ -6,19 +6,19 @@ const userRoutes = {
       operationId: 'deleteAvatar',
       responses: {
         200: {
-          description: 'Avatar Successfully deleted',
+          description: 'Avatar Successfully deleted'
         },
         400: {
-          description: 'Bad Request',
+          description: 'Bad Request'
         },
         401: {
-          description: 'Unauthorized',
+          description: 'Unauthorized'
         },
         403: {
-          description: 'User already exists',
-        },
-      },
-    },
+          description: 'User already exists'
+        }
+      }
+    }
   },
 
   user_update: {
@@ -30,26 +30,26 @@ const userRoutes = {
         content: {
           'multipart/form-data': {
             schema: {
-              $ref: '#/components/schemas/RegisterUpdate',
-            },
-          },
-        },
+              $ref: '#/components/schemas/RegisterUpdate'
+            }
+          }
+        }
       },
       responses: {
         200: {
-          description: 'User Successfully updated',
+          description: 'User Successfully updated'
         },
         400: {
-          description: 'Bad Request',
+          description: 'Bad Request'
         },
         401: {
-          description: 'Unauthorized',
+          description: 'Unauthorized'
         },
         403: {
-          description: 'User already exists',
-        },
-      },
-    },
+          description: 'User already exists'
+        }
+      }
+    }
   },
   user_delete: {
     delete: {
@@ -59,14 +59,14 @@ const userRoutes = {
       operationId: 'deleteUser',
       responses: {
         200: {
-          description: 'User Successfully deleted',
+          description: 'User Successfully deleted'
         },
         401: {
-          description: 'Unauthorized',
-        },
-      },
-    },
-  },
-};
+          description: 'Unauthorized'
+        }
+      }
+    }
+  }
+}
 
-export default userRoutes;
+export default userRoutes

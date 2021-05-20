@@ -1,8 +1,12 @@
-import * as Yup from 'yup';
+import * as Yup from 'yup'
 
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express'
 
-export default async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+export default async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
   try {
     const validationSchema = Yup.object().shape({
       title: Yup.string().min(1).max(100),
@@ -10,17 +14,19 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
       tasks: Yup.array()
         .of(
           Yup.object().shape({
-            title: Yup.string().min(1).max(100),
-          }),
+            title: Yup.string().min(1).max(100)
+          })
         )
         .min(0)
-        .max(50),
-    });
+        .max(50)
+    })
 
-    await validationSchema.validate(req.body, { abortEarly: false });
+    await validationSchema.validate(req.body, { abortEarly: false })
 
-    next();
+    next()
   } catch (err) {
-    return res.status(400).json({ error: 'Validation fails', messages: err.inner });
+    return res
+      .status(400)
+      .json({ error: 'Validation fails', messages: err.inner })
   }
-};
+}

@@ -1,10 +1,10 @@
-import MailService from '../../services/MailService';
+import MailService from '../../services/MailService'
 class ChangePasswordMail {
-  get key () {
+  get key() {
     return 'ChangePasswordMail'
   }
 
-  async handle ({ data }: { data: any }) {
+  async handle({ data }: { data: any }) {
     const { email, resetToken, FRONT_URL } = data
 
     await MailService.sendMail({

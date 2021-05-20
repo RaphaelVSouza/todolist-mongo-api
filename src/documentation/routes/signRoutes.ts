@@ -9,24 +9,24 @@ const signRoutes = {
         content: {
           'multipart/form-data': {
             schema: {
-              $ref: '#/components/schemas/RegisterUpdate',
-            },
-          },
-        },
+              $ref: '#/components/schemas/RegisterUpdate'
+            }
+          }
+        }
       },
       responses: {
         200: {
-          description: 'User Successfully created',
+          description: 'User Successfully created'
         },
         400: {
-          description: 'Bad Request',
+          description: 'Bad Request'
         },
         409: {
-          description: 'User already exists',
-        },
+          description: 'User already exists'
+        }
       },
-      security: [],
-    },
+      security: []
+    }
   },
   verify_email: {
     get: {
@@ -38,22 +38,22 @@ const signRoutes = {
           name: 'verifyToken',
           description: '',
           in: 'path',
-          required: true,
-        },
+          required: true
+        }
       ],
       responses: {
         200: {
-          description: 'Email verified successfully',
+          description: 'Email verified successfully'
         },
         401: {
-          description: 'Token invalid',
+          description: 'Token invalid'
         },
         403: {
-          description: 'Expired token, generate a new one',
-        },
+          description: 'Expired token, generate a new one'
+        }
       },
-      security: [],
-    },
+      security: []
+    }
   },
   send_verify_email: {
     post: {
@@ -65,27 +65,27 @@ const signRoutes = {
           'application/json': {
             schema: {
               type: 'object',
-            properties: {
-              email: {
-                type: 'string',
-                example: 'john.doe25@email.com',
-              },
-            },
-          },
+              properties: {
+                email: {
+                  type: 'string',
+                  example: 'john.doe25@email.com'
+                }
+              }
+            }
+          }
         },
-      },
-        required: true,
+        required: true
       },
       responses: {
         200: {
-          description: 'Email send',
+          description: 'Email send'
         },
         404: {
-          description: 'User not found',
-        },
+          description: 'User not found'
+        }
       },
-      security: [],
-    },
+      security: []
+    }
   },
   login: {
     post: {
@@ -97,29 +97,29 @@ const signRoutes = {
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/Login',
-            },
-          },
+              $ref: '#/components/schemas/Login'
+            }
+          }
         },
-        required: true,
+        required: true
       },
       responses: {
         200: {
-          description: 'Token successfully generated',
+          description: 'Token successfully generated'
         },
         400: {
-          description: 'Bad Request',
+          description: 'Bad Request'
         },
         401: {
-          description: 'User or password invalid',
+          description: 'User or password invalid'
         },
         403: {
-          description: 'Need to verify email first',
+          description: 'Need to verify email first'
         }
       },
-      security: [],
-    },
-  },
-};
+      security: []
+    }
+  }
+}
 
-export default signRoutes;
+export default signRoutes

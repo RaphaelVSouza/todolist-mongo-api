@@ -4,47 +4,47 @@ const schemas = {
     properties: {
       name: {
         type: 'string',
-        example: 'John Doe',
+        example: 'John Doe'
       },
       email: {
         type: 'string',
-        example: 'john.doe25@email.com',
+        example: 'john.doe25@email.com'
       },
       password: {
         type: 'string',
-        example: 'mysupersecretpassword123',
+        example: 'mysupersecretpassword123'
       },
       confirmPassword: {
         type: 'string',
-        example: 'mysupersecretpassword123',
-      },
-    },
+        example: 'mysupersecretpassword123'
+      }
+    }
   },
   RegisterUpdate: {
     type: 'object',
     properties: {
       name: {
         type: 'string',
-        example: 'John Doe',
+        example: 'John Doe'
       },
       email: {
         type: 'string',
-        example: 'john.doe25@email.com',
+        example: 'john.doe25@email.com'
       },
       password: {
         type: 'string',
-        example: 'mysupersecretpassword123',
+        example: 'mysupersecretpassword123'
       },
       confirmPassword: {
         type: 'string',
-        example: 'mysupersecretpassword123',
+        example: 'mysupersecretpassword123'
       },
 
       file: {
         type: 'string',
-        format: 'binary',
-      },
-    },
+        format: 'binary'
+      }
+    }
   },
 
   Login: {
@@ -52,13 +52,13 @@ const schemas = {
     properties: {
       email: {
         type: 'string',
-        example: 'john.doe25@email.com',
+        example: 'john.doe25@email.com'
       },
       password: {
         type: 'string',
-        example: 'mysupersecretpassword123',
-      },
-    },
+        example: 'mysupersecretpassword123'
+      }
+    }
   },
 
   forgot_password: {
@@ -66,9 +66,9 @@ const schemas = {
     properties: {
       email: {
         type: 'string',
-        example: 'john.doe25@email.com',
-      },
-    },
+        example: 'john.doe25@email.com'
+      }
+    }
   },
 
   reset_password: {
@@ -76,17 +76,17 @@ const schemas = {
     properties: {
       email: {
         type: 'string',
-        example: 'john.doe25@email.com',
+        example: 'john.doe25@email.com'
       },
       password: {
         type: 'string',
-        example: 'mysupernewpassword123',
+        example: 'mysupernewpassword123'
       },
       confirmPassword: {
         type: 'string',
-        example: 'mysupernewpassword123',
-      },
-    },
+        example: 'mysupernewpassword123'
+      }
+    }
   },
 
   Project: {
@@ -94,19 +94,19 @@ const schemas = {
     properties: {
       title: {
         type: 'string',
-        example: 'My project title',
+        example: 'My project title'
       },
       description: {
         type: 'string',
-        example: 'My project description',
+        example: 'My project description'
       },
       tasks: {
         type: 'array',
         items: {
-          $ref: '#/components/schemas/Task',
-        },
-      },
-    },
+          $ref: '#/components/schemas/Task'
+        }
+      }
+    }
   },
 
   Task: {
@@ -114,26 +114,26 @@ const schemas = {
     properties: {
       title: {
         type: 'string',
-        example: 'My task title',
+        example: 'My task title'
       },
       isCompleted: {
         type: 'boolean',
-        example: 'false',
-      },
-    },
+        example: 'false'
+      }
+    }
   },
 
   Error: {
     type: 'object',
     properties: {
       message: {
-        type: 'string',
+        type: 'string'
       },
       internal_code: {
-        type: 'string',
-      },
-    },
-  },
-};
+        type: 'string'
+      }
+    }
+  }
+}
 
-export default schemas;
+export default schemas

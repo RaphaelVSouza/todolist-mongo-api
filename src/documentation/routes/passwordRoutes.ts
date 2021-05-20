@@ -9,25 +9,25 @@ const passwordRoutes = {
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/forgot_password',
-            },
-          },
+              $ref: '#/components/schemas/forgot_password'
+            }
+          }
         },
-        required: true,
+        required: true
       },
       responses: {
         200: {
-          description: 'Recuperation mail sent',
+          description: 'Recuperation mail sent'
         },
         400: {
-          description: 'Bad Request',
+          description: 'Bad Request'
         },
         401: {
-          description: 'User not found',
-        },
+          description: 'User not found'
+        }
       },
-      security: [],
-    },
+      security: []
+    }
   },
   reset_password: {
     put: {
@@ -40,30 +40,30 @@ const passwordRoutes = {
           name: 'resetToken',
           description: '',
           in: 'path',
-          required: true,
-        },
+          required: true
+        }
       ],
       requestBody: {
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/reset_password',
-            },
-          },
+              $ref: '#/components/schemas/reset_password'
+            }
+          }
         },
-        required: true,
+        required: true
       },
       responses: {
         200: {
-          description: 'Password Successfully reseted',
+          description: 'Password Successfully reseted'
         },
         400: {
-          description: 'Bad Request',
-        },
+          description: 'Bad Request'
+        }
       },
-      security: [],
-    },
-  },
-};
+      security: []
+    }
+  }
+}
 
-export default passwordRoutes;
+export default passwordRoutes

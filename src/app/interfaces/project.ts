@@ -1,5 +1,5 @@
-import { Types } from 'mongoose';
-import { ITask } from '../interfaces/task';
+import { Types } from 'mongoose'
+import { ITask } from '../interfaces/task'
 
 interface IProject {
   title?: string

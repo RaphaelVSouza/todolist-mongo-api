@@ -1,60 +1,66 @@
-import { User } from '../../models/Users';
-import { Avatar } from '../../models/Avatar';
+import { User } from '../../models/Users'
+import { Avatar } from '../../models/Avatar'
 
-import { Request, Response } from 'express';
-import { IAvatarFile } from '../../interfaces/avatarFile';
-import { ISessionUser } from "../../interfaces/session";
+import { Request, Response } from 'express'
+import { IAvatarFile } from '../../interfaces/avatarFile'
+import { ISessionUser } from '../../interfaces/session'
 
+export default async function createUser(
+  req: Request,
+  res: Response
+): Promise<Response> {
+  const { userId } = req.user as ISessionUser
 
-export default async function createUser(req: Request, res: Response): Promise<Response> {
-  const { userId } = req.user as ISessionUser;
+  const { email = null, oldPassword = null } = req.body
 
-  const { email = null, oldPassword = null } = req.body;
+  const user = await User.findById(userId).select('+password')
 
-  const user = await User.findById(userId).select("+password");
-
-  if (!user) return res.status(404).json({ error: "User not found." });
+  if (!user) return res.status(404).json({ error: 'User not found.' })
 
   if (email && user.email !== email) {
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email })
     if (userExists) {
-      return res.status(409).json({ error: "User already exists." });
+      return res.status(409).json({ error: 'User already exists.' })
     }
 
-    req.body.isVerified = false;
+    req.body.isVerified = false
   }
   if (oldPassword) {
     if (!(await user.comparePassword(oldPassword)))
-      return res.status(401).json({ error: "Invalid password." });
+      return res.status(401).json({ error: 'Invalid password.' })
   }
 
   const updatedUser = await User.findOneAndUpdate({ _id: user._id }, req.body, {
-    new: true,
-  }).select("_id name email");
+    new: true
+  }).select('_id name email')
 
   const emptyAvatar = {
-    originalname: '', size: null, filename: '', location: ''
+    originalname: '',
+    size: null,
+    filename: '',
+    location: ''
   }
 
-  let { originalname, size, filename, path }: IAvatarFile = req.file || emptyAvatar;
+  const { originalname, size, filename, path }: IAvatarFile =
+    req.file || emptyAvatar
 
-  let newAvatar = {
+  const newAvatar = {
     name: originalname,
     size,
     key: filename,
-    url: path,
-  };
+    url: path
+  }
 
-  let avatar = await Avatar.findOne({ user_id: user._id });
+  let avatar = await Avatar.findOne({ user_id: user._id })
 
   if (newAvatar.key) {
-    avatar = new Avatar({ ...newAvatar, user_id: user._id });
-    await avatar.save();
+    avatar = new Avatar({ ...newAvatar, user_id: user._id })
+    await avatar.save()
   }
 
   return res.json({
-    message: "Data is successfully alterated",
+    message: 'Data is successfully alterated',
     updatedUser,
-    avatar,
-  });
+    avatar
+  })
 }

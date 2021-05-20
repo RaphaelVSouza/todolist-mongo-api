@@ -1,23 +1,25 @@
 import { Task } from '../../models/Tasks'
 
-import { Request, Response } from 'express';
-import { ISessionUser } from '../../interfaces/session';
+import { Request, Response } from 'express'
+import { ISessionUser } from '../../interfaces/session'
 
-  export default async function removeTask(req: Request, res: Response): Promise<Response> {
-    const { userId } = req.user as ISessionUser;
+export default async function removeTask(
+  req: Request,
+  res: Response
+): Promise<Response> {
+  const { userId } = req.user as ISessionUser
 
-    const { taskId } = req.params
+  const { taskId } = req.params
 
-    if (!taskId) return res.status(400).json({ error: 'Task ID must be passed.' })
+  if (!taskId) return res.status(400).json({ error: 'Task ID must be passed.' })
 
-    const task = await Task.findOne({ $and: [{ user_id: userId }, { _id: taskId }]})
+  const task = await Task.findOne({
+    $and: [{ user_id: userId }, { _id: taskId }]
+  })
 
-    if (!task) return res.status(404).json({ error: 'Task not found.' })
+  if (!task) return res.status(404).json({ error: 'Task not found.' })
 
+  await task.remove()
 
-    await task.remove()
-
-    return res.json({ message: 'Task Successfully removed' })
-  }
-
-
+  return res.json({ message: 'Task Successfully removed' })
+}

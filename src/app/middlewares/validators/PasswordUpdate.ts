@@ -1,8 +1,12 @@
-import * as Yup from 'yup';
+import * as Yup from 'yup'
 
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express'
 
-export default async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+export default async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
   try {
     const validationSchema = Yup.object().shape({
       password: Yup.string().min(3).max(100).required(),
@@ -10,14 +14,16 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
         .required()
         .when('password', {
           is: (password) => !!(password && password.length > 0),
-          then: Yup.string().oneOf([Yup.ref('password')]),
-        }),
-    });
+          then: Yup.string().oneOf([Yup.ref('password')])
+        })
+    })
 
-    await validationSchema.validate(req.body, { abortEarly: false });
+    await validationSchema.validate(req.body, { abortEarly: false })
 
-    next();
+    next()
   } catch (err) {
-    return res.status(400).json({ error: 'Validation fails', messages: err.inner });
+    return res
+      .status(400)
+      .json({ error: 'Validation fails', messages: err.inner })
   }
-};
+}

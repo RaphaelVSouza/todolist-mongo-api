@@ -1,10 +1,10 @@
-import schemas from './docSchemas';
+import schemas from './docSchemas'
 
-import signRoutes from './routes/signRoutes';
-import userRoutes from './routes/userRoutes';
-import passwordRoutes from './routes/passwordRoutes';
-import projectRoutes from './routes/projectRoutes';
-import taskRoutes from './routes/taskRoutes';
+import signRoutes from './routes/signRoutes'
+import userRoutes from './routes/userRoutes'
+import passwordRoutes from './routes/passwordRoutes'
+import projectRoutes from './routes/projectRoutes'
+import taskRoutes from './routes/taskRoutes'
 
 const config = {
   swaggerDefinition: {
@@ -14,14 +14,14 @@ const config = {
         Bearer: {
           type: 'http',
           scheme: 'bearer',
-          bearerFormat: 'JWT',
-        },
-      },
+          bearerFormat: 'JWT'
+        }
+      }
     },
     security: [
       {
-        Bearer: [],
-      },
+        Bearer: []
+      }
     ],
     openapi: '3.0.0',
     info: {
@@ -30,35 +30,35 @@ const config = {
       description: 'An API to register users, projects and tasks',
       license: {
         name: 'MIT',
-        url: 'https://choosealicense.com/licenses/mit/',
+        url: 'https://choosealicense.com/licenses/mit/'
       },
       contact: {
         name: 'Raphael',
-        email: 'raphael5254@outlook.com',
-      },
+        email: 'raphael5254@outlook.com'
+      }
     },
     servers: [
       {
         url: `${process.env.FRONT_URL}`,
-        description: 'Server',
-      },
+        description: 'Server'
+      }
     ],
     tags: [
       {
-        name: 'Register/Session',
+        name: 'Register/Session'
       },
       {
-        name: 'Password',
+        name: 'Password'
       },
       {
-        name: 'User Management - Edit/Delete',
+        name: 'User Management - Edit/Delete'
       },
       {
-        name: 'User Management - Avatar',
+        name: 'User Management - Avatar'
       },
       {
-        name: 'Projects',
-      },
+        name: 'Projects'
+      }
     ],
     paths: {
       '/register': signRoutes.register,
@@ -76,14 +76,14 @@ const config = {
       '/my-projects/{projectId}/tasks': projectRoutes.project_show,
       '/my-projects/{projectId}/delete': projectRoutes.project_delete,
       '/task/{taskId}/edit': taskRoutes.task_update,
-      '/task/{taskId}/delete': taskRoutes.task_delete,
-    },
+      '/task/{taskId}/delete': taskRoutes.task_delete
+    }
   },
 
-  apis: [],
-};
+  apis: []
+}
 
-export default config;
+export default config
 
 // * User Management - Register/Session
 

@@ -1,8 +1,5 @@
-import { Types } from "mongoose";
-
-
 interface ISessionUser {
-  userId: string,
+  userId: string
 }
 
 export { ISessionUser }

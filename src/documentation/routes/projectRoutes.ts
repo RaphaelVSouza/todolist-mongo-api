@@ -9,23 +9,23 @@ const projectRoutes = {
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/Project',
-            },
-          },
-        },
+              $ref: '#/components/schemas/Project'
+            }
+          }
+        }
       },
       responses: {
         200: {
-          description: 'Project Successfully created',
+          description: 'Project Successfully created'
         },
         400: {
-          description: 'Bad Request',
+          description: 'Bad Request'
         },
         401: {
-          description: 'Unauthorized',
-        },
-      },
-    },
+          description: 'Unauthorized'
+        }
+      }
+    }
   },
   project_index: {
     get: {
@@ -37,33 +37,33 @@ const projectRoutes = {
           name: 'title',
           description: 'search project by title',
           in: 'query',
-          type: 'string',
+          type: 'string'
         },
         {
           name: 'skip',
           description: '',
           in: 'query',
-          type: 'integer',
+          type: 'integer'
         },
         {
           name: 'limit',
           description: '',
           in: 'query',
-          type: 'integer',
-        },
+          type: 'integer'
+        }
       ],
       responses: {
         200: {
-          description: 'Array with projects',
+          description: 'Array with projects'
         },
         400: {
-          description: 'Bad Request',
+          description: 'Bad Request'
         },
         401: {
-          description: 'Unauthorized',
-        },
-      },
-    },
+          description: 'Unauthorized'
+        }
+      }
+    }
   },
   project_update: {
     put: {
@@ -75,23 +75,23 @@ const projectRoutes = {
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/Project',
-            },
-          },
-        },
+              $ref: '#/components/schemas/Project'
+            }
+          }
+        }
       },
       responses: {
         200: {
-          description: 'Project Successfully updated',
+          description: 'Project Successfully updated'
         },
         400: {
-          description: 'Bad Request',
+          description: 'Bad Request'
         },
         401: {
-          description: 'Unauthorized',
-        },
-      },
-    },
+          description: 'Unauthorized'
+        }
+      }
+    }
   },
   project_show: {
     get: {
@@ -104,18 +104,18 @@ const projectRoutes = {
           name: 'projectId',
           description: '',
           in: 'path',
-          required: true,
-        },
+          required: true
+        }
       ],
       responses: {
         200: {
-          description: 'A project with tasks',
+          description: 'A project with tasks'
         },
         400: {
-          description: 'Bad Request',
-        },
-      },
-    },
+          description: 'Bad Request'
+        }
+      }
+    }
   },
   project_delete: {
     delete: {
@@ -128,19 +128,19 @@ const projectRoutes = {
           name: 'projectId',
           description: '',
           in: 'path',
-          required: true,
-        },
+          required: true
+        }
       ],
       responses: {
         200: {
-          description: 'Project removed with success',
+          description: 'Project removed with success'
         },
         400: {
-          description: 'Bad Request',
-        },
-      },
-    },
-  },
-};
+          description: 'Bad Request'
+        }
+      }
+    }
+  }
+}
 
-export default projectRoutes;
+export default projectRoutes

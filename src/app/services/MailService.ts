@@ -1,19 +1,18 @@
-import { transporter } from '../config/mail';
-import { IMail } from '../interfaces/mail';
+import { transporter } from '../config/mail'
+import { IMail } from '../interfaces/mail'
 
-import smtpConfig from '../config/smtpConfig';
+import smtpConfig from '../config/smtpConfig'
 
 class Mail {
-  private transporter;
+  private transporter
 
   constructor() {
-    this.transporter = transporter;
+    this.transporter = transporter
   }
 
   sendMail(message: IMail) {
-
-    return this.transporter.sendMail({ ...smtpConfig, ...message });
+    return this.transporter.sendMail({ ...message })
   }
 }
 
-export default new Mail();
+export default new Mail()

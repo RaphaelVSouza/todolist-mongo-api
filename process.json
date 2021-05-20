@@ -1,15 +1,15 @@
 {
   "apps": [
     {
-      "name": "worker",
-      "script": "./dist/queue.js",
+      "name": "todolist-api",
+      "script": "./dist/server.js",
       "env_production": {
         "NODE_ENV": "production"
       }
     },
     {
-      "name": "api-app",
-      "script": "./dist/server.js",
+      "name": "todolist-queue",
+      "script": "./dist/queue.js",
       "env_production": {
         "NODE_ENV": "production"
       }
