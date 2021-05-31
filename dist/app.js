@@ -30,9 +30,7 @@ class App {
     middlewares() {
         this.server.use(express_1.default.json());
         this.server.use(express_1.default.urlencoded({ extended: false }));
-        this.server.use(cors_1.default({
-            allowedHeaders: ['Content-type', 'Authorization']
-        }));
+        this.server.use(cors_1.default());
         this.server.use('/files', express_1.default.static(path_1.resolve(__dirname, '..', 'tmp', 'uploads')));
         jwtAuth_1.default(passport_1.default);
         this.server.use(helmet_1.default());
