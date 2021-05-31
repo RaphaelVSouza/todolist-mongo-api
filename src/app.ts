@@ -38,15 +38,12 @@ class App {
   private middlewares() {
     this.server.use(express.json())
     this.server.use(express.urlencoded({ extended: false }))
-    this.server.use(
-      cors({
-        allowedHeaders: ['Content-type', 'Authorization']
-      })
-    )
+    this.server.use(cors())
     this.server.use(
       '/files',
       express.static(resolve(__dirname, '..', 'tmp', 'uploads'))
     )
+
     applyJWTStrategy(passport)
 
     this.server.use(helmet())
