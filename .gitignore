@@ -4,4 +4,4 @@ coverage
 logs/access.log
 dist
 tmp/uploads/*
-src/app/config/util/*
+
