@@ -10,7 +10,6 @@ const currentMailService =
     ? googleMailService
     : (defaultMailService as any)
 
-console.log(currentMailService)
 const transporter = nodemailer.createTransport(currentMailService)
 
 const viewPath = path.resolve(__dirname, '..', '..', '..', 'views', 'email')
