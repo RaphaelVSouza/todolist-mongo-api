@@ -42,7 +42,7 @@ const config = {
       {
         url: isProd
           ? `${process.env.SERVER_HOST}:${process.env.PORT}`
-          : `${process.env.SERVER_hOST}`,
+          : `${process.env.SERVER_HOST}`,
         description: 'Server'
       }
     ],
