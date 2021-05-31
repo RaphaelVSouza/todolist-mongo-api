@@ -12,7 +12,6 @@ const gmail_1 = __importDefault(require("./gmail"));
 const currentMailService = process.env.MAIL_SERVICE === 'gmail'
     ? gmail_1.default
     : smtpConfig_1.default;
-console.log(currentMailService);
 const transporter = nodemailer_1.default.createTransport(currentMailService);
 exports.transporter = transporter;
 const viewPath = path_1.default.resolve(__dirname, '..', '..', '..', 'views', 'email');
