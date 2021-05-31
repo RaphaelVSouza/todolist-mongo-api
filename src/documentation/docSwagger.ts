@@ -5,7 +5,6 @@ import userRoutes from './routes/userRoutes'
 import passwordRoutes from './routes/passwordRoutes'
 import projectRoutes from './routes/projectRoutes'
 import taskRoutes from './routes/taskRoutes'
-const isProd = process.env.NODE_ENV === 'production'
 
 const config = {
   swaggerDefinition: {
@@ -40,9 +39,7 @@ const config = {
     },
     servers: [
       {
-        url: isProd
-          ? `${process.env.SERVER_HOST}:${process.env.PORT}`
-          : `${process.env.SERVER_HOST}`,
+        url: `${process.env.SERVER_URL}`,
         description: 'Server'
       }
     ],
